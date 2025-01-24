@@ -7,13 +7,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.autsub.autsub.CompanyPlan.CompanyPlan;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -40,7 +43,9 @@ public class Company implements UserDetails{
      @Id
      @GeneratedValue(strategy = GenerationType.IDENTITY) 
      private Long id;
-
+ 
+     @OneToMany(mappedBy = "company_name", cascade = CascadeType.ALL)
+     private List<CompanyPlan> companyPlan;
 
     @NotBlank(message = "Name is mandatory")
     @Column(name = "name", nullable = false, unique = true)
@@ -67,9 +72,13 @@ public class Company implements UserDetails{
      @Column(columnDefinition = "VARCHAR(10) NOT NULL CHECK (LENGTH(Commercial_Registration_Number) = 10)")
      private String Commercial_Registration_Number;
 
-     @Column(name = "avtive", nullable = false)
-     @Value("false")
+     @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
      private boolean active;
+
+
+     public Boolean getActive() {
+         return active;
+     }
 
 
     @Override

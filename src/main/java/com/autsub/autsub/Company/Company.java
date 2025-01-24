@@ -3,6 +3,7 @@ package com.autsub.autsub.Company;
 import java.util.Collection;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,12 +13,17 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "company")
-public class Company  implements UserDetails{
+@Setter
+@Getter
+public class Company implements UserDetails{
 
     public Company() {
     }
@@ -61,6 +67,10 @@ public class Company  implements UserDetails{
      @Column(columnDefinition = "VARCHAR(10) NOT NULL CHECK (LENGTH(Commercial_Registration_Number) = 10)")
      private String Commercial_Registration_Number;
 
+     @Column(name = "avtive", nullable = false)
+     @Value("false")
+     private boolean active;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -96,6 +106,4 @@ public class Company  implements UserDetails{
     public String getPassword() {
        return password;
     }
-
-
 }

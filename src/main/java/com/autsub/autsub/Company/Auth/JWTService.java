@@ -38,7 +38,7 @@ public class JWTService {
         return claimsResolver.apply(claims);
     }
 
-    // used by authService to pass User obj
+    
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }
@@ -63,7 +63,7 @@ public class JWTService {
     }
 
 
-    // invoed in JWTfilter 
+    
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token) && validateToken(token);
@@ -86,7 +86,7 @@ public class JWTService {
                 .getBody();
     }
 
-   // besed on the key
+   
     private boolean validateToken(String token) {
         try {
             Jwts
@@ -103,7 +103,7 @@ public class JWTService {
     @NonNull
     private Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        return  Keys.hmacShaKeyFor(keyBytes);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
 }

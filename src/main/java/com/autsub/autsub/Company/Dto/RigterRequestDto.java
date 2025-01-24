@@ -8,15 +8,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
-@Setter
 @Getter
+@Setter
 public class RigterRequestDto {
     
      @NotBlank(message = "Name is mandatory")
      private String name;
 
-    @NotBlank(message = "Email is mandatory")
-    @Email(message = "Email should be in valid format")
+     @NotBlank(message = "Email is mandatory")
+     @Email(message = "Email should be in valid format")
      private String email;
 
      @NotBlank(message = "Password is mandatory")

@@ -55,13 +55,13 @@ import java.util.List;
         public CorsConfigurationSource corsConfigurationSource() {
             CorsConfiguration configuration = new CorsConfiguration();
 
-            configuration.setAllowedOrigins(List.of("http://localhost:8080","http://localhost:8080/Company/auth/register","http://localhost:8080/Company/auth/login"));
+            configuration.setAllowedOrigins(List.of("http://localhost:8080","http://localhost:8080/company/auth/register","http://localhost:8080/company/auth/login"));
             configuration.setAllowedMethods(List.of("GET","POST"));
             configuration.setAllowedHeaders(List.of("Authorization","Content-Type"));
 
             UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
-            source.registerCorsConfiguration("Company/auth/**",configuration);
+            source.registerCorsConfiguration("/company/auth/**",configuration);
 
             return source;
         }

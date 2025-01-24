@@ -1,15 +1,20 @@
 package com.autsub.autsub.Company;
 
+import java.io.IOException;
 import java.util.Optional;
 import org.apache.coyote.BadRequestException;
-import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.autsub.autsub.Company.Auth.JWTService;
+import com.autsub.autsub.Company.Dto.LoginRequestDto;
 import com.autsub.autsub.Company.Dto.LoginResponseDto;
+import com.autsub.autsub.Company.Dto.PasswordRestRequest;
 import com.autsub.autsub.Company.Dto.RigterRequestDto;
 import com.autsub.autsub.Company.Dto.RigterResponse;
+import com.autsub.autsub.Company.Dto.UpdateCompanyDataDto;
 
 @Service
 public class CompanyServiceImp implements CompnayService {
@@ -17,15 +22,11 @@ public class CompanyServiceImp implements CompnayService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final CompanyRepo companyRepo;
     private final JWTService jwtService;
-    //private final MailSender mailSender;
-    //private final SimpleMailMessage message;
 
-    CompanyServiceImp(BCryptPasswordEncoder passwordEncoder, CompanyRepo companyRepo, JWTService jwtService) {
+     CompanyServiceImp(BCryptPasswordEncoder passwordEncoder, CompanyRepo companyRepo, JWTService jwtService, UserDetailsService userDetailsService) {
         this.passwordEncoder = passwordEncoder;
         this.companyRepo = companyRepo;
         this.jwtService = jwtService;
-       // this.mailSender = mailSender;
-        //this.message = message;
     }
 
 
@@ -60,8 +61,8 @@ public class CompanyServiceImp implements CompnayService {
    
 
     @Override
-    public LoginResponseDto Companylogin(RigterRequestDto rigterRequestDto) throws Exception {
-        Optional<Company> iscompanyExists = companyRepo.findByName(rigterRequestDto.getName());
+    public LoginResponseDto Companylogin(LoginRequestDto loginRequestDto) throws Exception {
+        Optional<Company> iscompanyExists = companyRepo.findByName(loginRequestDto.getEmail());
 
         if (iscompanyExists.isEmpty()) {
             throw new BadRequestException("something went wrong, duble check your email or password");
@@ -69,7 +70,7 @@ public class CompanyServiceImp implements CompnayService {
 
         Company company = iscompanyExists.get();
 
-        if (!passwordEncoder.matches(rigterRequestDto.getPassword(), company.getPassword())) {
+        if (!passwordEncoder.matches(loginRequestDto.getPassword(), company.getPassword())) {
             throw new BadRequestException("something went wrong, duble check your email or password");
         }
 
@@ -79,5 +80,44 @@ public class CompanyServiceImp implements CompnayService {
     }
 
 
+    @Override
+    public void emailAndaddressUpdate(UpdateCompanyDataDto updateCompanyDataDto) throws Exception {
+        companyRepo.updateCompanyEmailAndAddress(updateCompanyDataDto.getEmail(), updateCompanyDataDto.getAddress());
+
+    }
+
+     @Override
+     public void updateCompnayPassword(PasswordRestRequest passwordRestRequest) throws IOException{
+       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+       Optional<Company> isCompanyExists = companyRepo.findByName(authentication.getCredentials().toString());
+
+         if (isCompanyExists.isEmpty()) {
+              throw new BadRequestException("the account you are trying to update is not found");
+         }
+
+         String password = passwordRestRequest.getPassword();
+         Company company = isCompanyExists.get();
+
+         if (!passwordEncoder.matches(password, company.getPassword())) {
+             throw new BadRequestException("the password you entered is not correct");
+         }
+
+         company.setPassword(passwordEncoder.encode(password));
+
+         companyRepo.save(company);
+
+     }
+
+
+     public void deleteCompany() throws IOException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Optional<Company> isCompanyExists = companyRepo.findByName(authentication.getCredentials().toString());
+
+        if (isCompanyExists.isEmpty()) {
+            throw new BadRequestException("the account you are trying to delete is not found");
+        }
+
+        companyRepo.delete(isCompanyExists.get());
+     }
       
 }

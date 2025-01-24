@@ -68,7 +68,7 @@ import java.io.IOException;
                     if (jwtService.isTokenValid(token, userDetails)) {
                         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                                 userDetails,
-                                null,
+                                userDetails.getUsername(),
                                 userDetails.getAuthorities()
                         );
 

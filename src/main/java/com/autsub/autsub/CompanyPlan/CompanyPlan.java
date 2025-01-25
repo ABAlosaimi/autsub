@@ -63,6 +63,9 @@ public class CompanyPlan {
     @Column(name = "stumbled_subscription", nullable = true)
     private double stumbled_subscription;
 
+    @Column(name = "stumble_reason", nullable = true)
+    private String stumbleReason;
+
     @Column(name = "last_offer_price", nullable = true)
     private double last_offer_price;
 
@@ -78,7 +81,8 @@ public class CompanyPlan {
     public CompanyPlan() {
     }
 
-    public CompanyPlan(String titel, String category, String description, String recurring, int price, boolean trial) {
+    public CompanyPlan(String titel, String category, String description, String recurring, int price, boolean trial, Company company_name) {
+        this.company_name = company_name;
         this.titel = titel;
         this.category = category;
         this.description = description;

@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.autsub.autsub.CompanyPlan.CompanyPlan;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -44,10 +45,11 @@ public class Company implements UserDetails{
      private Long id;
  
      @OneToMany(mappedBy = "company_name", cascade = CascadeType.ALL)
+     @JsonIgnore
      private List<CompanyPlan> companyPlan;
 
-    @NotBlank(message = "Name is mandatory")
-    @Column(name = "name", nullable = false, unique = true)
+     @NotBlank(message = "Name is mandatory")
+     @Column(name = "name", nullable = false, unique = true)
      private String name;
 
     @NotBlank(message = "Email is mandatory")

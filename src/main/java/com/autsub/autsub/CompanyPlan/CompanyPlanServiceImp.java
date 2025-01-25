@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Optional;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
 import com.autsub.autsub.Company.Company;
 import com.autsub.autsub.Company.CompanyRepo;
 import com.autsub.autsub.CompanyPlan.Dto.PlanRequestDto;
@@ -11,6 +13,7 @@ import com.autsub.autsub.CompanyPlan.Dto.PlanResponseDto;
 import com.autsub.autsub.Exception.BadRequestException;
 import com.autsub.autsub.Exception.NotActiveAccountException;
 
+@Service
 public class CompanyPlanServiceImp implements CompanyPlanService {
 
     private final CompanyPlanRepo companyPlanRepo;
@@ -36,7 +39,8 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
             planRequestDto.getDescription(),
             planRequestDto.getRecurring(),
             planRequestDto.getPrice(),
-            planRequestDto.getTrial()
+            planRequestDto.getTrial(),
+            iscompanyActive.get()
         );
 
         CompanyPlan newCompanyPlan = companyPlanRepo.save(companyPlan);

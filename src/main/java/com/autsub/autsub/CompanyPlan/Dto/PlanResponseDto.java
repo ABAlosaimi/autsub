@@ -1,7 +1,13 @@
 package com.autsub.autsub.CompanyPlan.Dto;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Setter;
 
+@NoArgsConstructor
+@Setter
+@Getter
 public class PlanResponseDto {
     
     @NonNull

@@ -1,5 +1,6 @@
 package com.autsub.autsub.CompanyPlan;
 
+import java.io.IOException;
 import java.util.Optional;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -44,6 +45,33 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
 
     }
 
-    
+    @Override
+    public void updatePlanData(PlanRequestDto planRequestDto) throws IOException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Optional<Company> iscompanyActive = companyRepo.findByName(authentication.getCredentials().toString());
+
+        if (!iscompanyActive.isPresent() || iscompanyActive.get().getActive() == false) {
+            throw new BadRequestException("Company not found or your account is not active more");
+        }
+
+        Company company = iscompanyActive.get();
+
+        Optional<CompanyPlan> companyPlan = companyPlanRepo.findByCompany_name(company.getName());
+
+        if (!companyPlan.isPresent()) {
+            throw new BadRequestException("Company plan not found");
+        }
+
+        CompanyPlan newCompanyPlan = companyPlan.get();
+
+        companyPlanRepo.updateCompanyPlan(  
+        newCompanyPlan.getTitel(),
+         newCompanyPlan.getCategory(),
+          newCompanyPlan.getDescription(),
+           newCompanyPlan.getRecurring(),
+            newCompanyPlan.getCategory(),
+             newCompanyPlan.getTitel());
+
+    }
     
 }

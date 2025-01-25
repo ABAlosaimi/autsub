@@ -1,6 +1,10 @@
 package com.autsub.autsub.CompanyPlan;
 
+import java.time.Instant;
+import java.util.Date;
+
 import com.autsub.autsub.Company.Company;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -59,6 +63,17 @@ public class CompanyPlan {
     @Column(name = "stumbled_subscription", nullable = true)
     private double stumbled_subscription;
 
+    @Column(name = "last_offer_price", nullable = true)
+    private double last_offer_price;
+
+    @Column(name = "last_offer_date",  nullable = true)
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date last_offer_date;
+
+
+    public void setLast_offer_date(String last_offer_date) {
+        this.last_offer_date = Date.from(Instant.parse(last_offer_date));
+    }
 
     public CompanyPlan() {
     }

@@ -7,4 +7,5 @@ import com.autsub.autsub.CompanyPlan.Dto.PlanResponseDto;
 
 public interface CompanyPlanService {
  PlanResponseDto createCompanyPlan(PlanRequestDto planRequestDto) throws IOException;
+ void updatePlanData(PlanRequestDto planRequestDto) throws IOException;
 }

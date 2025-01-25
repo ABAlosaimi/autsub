@@ -55,4 +55,11 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
      }
 
+     @ExceptionHandler(NotActiveAccountException.class)
+      public ResponseEntity<Object> notActiveAccountExceptionHandler(NotActiveAccountException ex){
+         errorResponse.setMessage(List.of(ex.getMessage()));
+         errorResponse.setLocalTime(LocalTime.now());
+         return new ResponseEntity<>(errorResponse,HttpStatus.BAD_REQUEST);
+      }
+
  }

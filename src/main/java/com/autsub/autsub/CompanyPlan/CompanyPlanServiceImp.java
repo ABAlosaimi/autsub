@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.util.Optional;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-
 import com.autsub.autsub.Company.Company;
 import com.autsub.autsub.Company.CompanyRepo;
 import com.autsub.autsub.CompanyPlan.Dto.PlanRequestDto;
 import com.autsub.autsub.CompanyPlan.Dto.PlanResponseDto;
 import com.autsub.autsub.Exception.BadRequestException;
+import com.autsub.autsub.Exception.NotActiveAccountException;
 
 public class CompanyPlanServiceImp implements CompanyPlanService {
 
@@ -27,7 +27,7 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
         Optional<Company> iscompanyActive = companyRepo.findByName(authentication.getCredentials().toString());
 
         if (!iscompanyActive.isPresent() || iscompanyActive.get().getActive() == false) {
-            throw new BadRequestException("Company not found or your account is not active anymore");
+            throw new NotActiveAccountException();
         }
 
         CompanyPlan companyPlan = new CompanyPlan(
@@ -51,7 +51,7 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
         Optional<Company> iscompanyActive = companyRepo.findByName(authentication.getCredentials().toString());
 
         if (!iscompanyActive.isPresent() || iscompanyActive.get().getActive() == false) {
-            throw new BadRequestException("Company not found or your account is not active more");
+            throw new NotActiveAccountException();
         }
 
         Company company = iscompanyActive.get();
@@ -99,13 +99,12 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
     @Override
     public void deletePlan(Long palnId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         if (authentication == null) {
             throw new BadRequestException("you are not authorized to do this action");
         }
 
         companyPlanRepo.deleteById(palnId);
     }
-
-    
-    
-}
+   
+ }

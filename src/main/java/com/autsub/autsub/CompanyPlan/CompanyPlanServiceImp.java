@@ -27,7 +27,7 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
         Optional<Company> iscompanyActive = companyRepo.findByName(authentication.getCredentials().toString());
 
         if (!iscompanyActive.isPresent() || iscompanyActive.get().getActive() == false) {
-            throw new BadRequestException("Company not found or your account is not active more");
+            throw new BadRequestException("Company not found or your account is not active anymore");
         }
 
         CompanyPlan companyPlan = new CompanyPlan(
@@ -73,5 +73,39 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
              newCompanyPlan.getTitel());
 
     }
+
+
+    @Override
+    public void providOffer(Long planId){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        
+        if(authentication == null){
+            throw new BadRequestException("you are not authorized to do this action");
+        }
+
+       Optional<CompanyPlan> isPlanExists = companyPlanRepo.findById(planId);
+
+         if(isPlanExists.isEmpty()){
+              throw new BadRequestException("plan not found");
+         }
+
+        CompanyPlan companyPlan = isPlanExists.get();
+
+        companyPlanRepo.updateCompanyPlanLastOffer(companyPlan.getId());
+        
+    }
+
+
+    @Override
+    public void deletePlan(Long palnId){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            throw new BadRequestException("you are not authorized to do this action");
+        }
+
+        companyPlanRepo.deleteById(palnId);
+    }
+
+    
     
 }

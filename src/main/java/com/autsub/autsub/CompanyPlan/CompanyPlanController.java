@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,4 +40,21 @@ public class CompanyPlanController {
         return ResponseEntity.status(200).build();
                              
     }
+
+    @PutMapping("/offer")
+    public ResponseEntity<Object> providOffer(Long planId) {
+        companyPlanService.providOffer(planId);
+
+        return ResponseEntity.status(200).build();
+                             
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Object> deletePlan(Long planId) {
+        companyPlanService.deletePlan(planId);
+
+        return ResponseEntity.status(204).build();
+                             
+    }
+
 }

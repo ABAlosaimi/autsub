@@ -14,4 +14,10 @@ public interface CompanyPlanRepo extends JpaRepository<CompanyPlan, Long> {
     @Transactional
     @Query(value = "UPDATE company_plan cp SET cp.title = ?1, cp.category = ?2, cp.info = ?3, cp.recurring = ?4, cp.price = ?5, cp.trial = ?6 WHERE cp.title = ?1 AND cp.category = ?2 AND cp.info = ?3 AND cp.recurring = ?4 AND cp.price = ?5 AND cp.trial = ?6", nativeQuery = true)
     void updateCompanyPlan(String title, String category, String info, String recurring, String price, String trial);
+
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE company_plan cp SET cp.last_offer_price = cp.last_offer_price + 1, cp.last_offer_date = NOW() WHERE cp.id = ?1", nativeQuery = true)
+    void updateCompanyPlanLastOffer(Long id);
+
 }

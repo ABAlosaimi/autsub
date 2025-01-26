@@ -28,22 +28,22 @@ public class PlanStatisticsController {
 
 
     @PutMapping("/gather-new")
-    public ResponseEntity<Object> newSubscription(@NotBlank @RequestBody Long planId, @NotBlank @RequestBody String companyName) throws Exception{
-      planStatisticsService.newSubscription(planId, companyName);
+    public ResponseEntity<Object> newSubscription(@NotBlank @RequestBody Long planId) throws Exception{
+      planStatisticsService.newSubscription(planId);
 
       return ResponseEntity.status(200).build();
     }
 
     @PutMapping("/cancel")
-    public ResponseEntity<Object> cancleSubscription(@NotBlank @RequestBody Long planId, @NotBlank @RequestBody String companyName) throws Exception{
-        planStatisticsService.cancelationOfsubscription(planId, companyName);
+    public ResponseEntity<Object> cancleSubscription(@NotBlank @RequestBody Long planId) throws Exception{
+        planStatisticsService.cancelationOfsubscription(planId);
 
         return ResponseEntity.status(200).build();
     }
 
     @PutMapping("/stumble")
-    public ResponseEntity<Object> stumbleSubscription(@NotBlank @RequestBody Long planId, @NotBlank @RequestBody String companyName, @NotBlank @RequestBody String stumbleReason) throws Exception{
-     planStatisticsService.stumbledPlan(planId, companyName, stumbleReason);
+    public ResponseEntity<Object> stumbleSubscription(@NotBlank @RequestBody Long planId, @NotBlank @RequestBody String stumbleReason) throws Exception{
+     planStatisticsService.stumbledPlan(planId, stumbleReason);
 
      return ResponseEntity.status(200).build();
 
@@ -56,7 +56,6 @@ public class PlanStatisticsController {
       return ResponseEntity.status(200).build();
 
     }
-
 
     @GetMapping("/allplans")
     public ResponseEntity<List<CompanyPlan>> getCompanyPlans() throws Exception{

@@ -54,15 +54,15 @@ import java.io.IOException;
                 
                 final String token = authHeader.substring(7);
 
-                final String username = jwtService.extractUsername(token);
+                final String comapayName = jwtService.extractCompanyName(token);
 
                 
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-                if (username != null && authentication == null) { 
+                if (comapayName != null && authentication == null) { 
 
                    
-                    UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+                    UserDetails userDetails = this.userDetailsService.loadUserByUsername(comapayName);
 
                    
                     if (jwtService.isTokenValid(token, userDetails)) {

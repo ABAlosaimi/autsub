@@ -42,7 +42,7 @@ public class CompanyPlanController {
     }
 
     @PutMapping("/offer")
-    public ResponseEntity<Object> providOffer(Long planId, int offerPrice) {
+    public ResponseEntity<Object> providOffer(Long planId, int offerPrice) throws Exception {
         companyPlanService.providOffer(planId, offerPrice);
 
         return ResponseEntity.status(200).build();
@@ -50,7 +50,7 @@ public class CompanyPlanController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<Object> deletePlan(Long planId) {
+    public ResponseEntity<Object> deletePlan(Long planId) throws Exception {
         companyPlanService.deletePlan(planId);
 
         return ResponseEntity.status(204).build();

@@ -12,7 +12,6 @@ import com.autsub.autsub.Company.CompanyRepo;
 import com.autsub.autsub.CompanyPlan.CompanyPlan;
 import com.autsub.autsub.CompanyPlan.CompanyPlanRepo;
 import com.autsub.autsub.Exception.NotActiveAccountException;
-import com.autsub.autsub.Exception.UnauthorizedException;
 import com.autsub.autsub.PlanStatistics.Dto.PlansStatisticsResposeDto;
 import com.autsub.autsub.PlanStatistics.Dto.StaticPlansDto;
 
@@ -28,14 +27,10 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService{
     }
 
     @Override
-    public void newSubscription(Long planId, String companyName) throws IOException{
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public void newSubscription(Long planId) throws IOException{
+         String companyName = authrnticationCheck();
 
-        if (authentication == null) {
-            throw new UnauthorizedException();
-        }
-
-        Optional<Company> isCompanyActive = companyRepo.findByName(companyName);
+         Optional<Company> isCompanyActive = companyRepo.findByName(companyName);
 
         if (!isCompanyActive.isPresent() || isCompanyActive.get().getActive() == false) {
             throw new BadRequestException("Company is not active or not found");
@@ -53,12 +48,8 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService{
 
 
     @Override
-    public void cancelationOfsubscription(Long planId, String companyName) throws BadRequestException{
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if(authentication == null){
-          throw new UnauthorizedException();
-        }
+    public void cancelationOfsubscription(Long planId) throws IOException{
+         String companyName = authrnticationCheck();
 
         Optional<Company> isCompanyActive = companyRepo.findByName(companyName);
 
@@ -78,13 +69,9 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService{
 
 
     @Override
-    public void stumbledPlan(Long planId, String companyName, String stumbleReason) throws BadRequestException{
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if(authentication == null){
-            throw new UnauthorizedException();
-        }
-
+    public void stumbledPlan(Long planId, String stumbleReason) throws IOException{
+        String companyName = authrnticationCheck();
+        
         Optional<Company> isCompanyActive = companyRepo.findByName(companyName);
 
         if(!isCompanyActive.isPresent() || isCompanyActive.get().getActive() == false){
@@ -103,13 +90,9 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService{
      
     @Override
     public void insertStaticCompanyPlan(StaticPlansDto staticPlansDto) throws IOException{
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+         String companyName = authrnticationCheck();
 
-        if(authentication == null){
-            throw new UnauthorizedException();
-        }
-
-        Optional<Company> isCompanyActive = companyRepo.findByName(authentication.getCredentials().toString());
+         Optional<Company> isCompanyActive = companyRepo.findByName(companyName);
 
         if(!isCompanyActive.isPresent() || isCompanyActive.get().getActive() == false){
             throw new BadRequestException("the company account is no more active or not found");
@@ -130,33 +113,42 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService{
             staticPlansDto.getDescription().length > insertCounter &&
             staticPlansDto.getPrice().length > insertCounter 
            ) {
+      
+            if (staticPlansDto.getTitel().length <= 200) {
+                
+              for (int j = 0; j<staticPlansDto.getTitel().length/2; j++){
 
-        for (int j = 0; j<100; j++){
+              companyPlanRepo.insertCompanyPlan(planTitles[j],
+                 planCategories[j],
+                 planDescriptions[j],
+                 planRecurrings[j],
+                 planPrices[j], 
+                 planTrials[j]);
 
-            companyPlanRepo.insertCompanyPlan(planTitles[j],
-             planCategories[j],
-             planDescriptions[j],
-             planRecurrings[j],
-             planPrices[j], 
-             planTrials[j]);
+                 insertCounter++;
+            }
+        }else{
+            for (int j = 0; j<staticPlansDto.getTitel().length/10; j++){
 
-            insertCounter++;
-        }
+                companyPlanRepo.insertCompanyPlan(planTitles[j],
+                 planCategories[j],
+                 planDescriptions[j],
+                 planRecurrings[j],
+                 planPrices[j], 
+                 planTrials[j]);
+    
+                insertCounter++;
+                }
+           }
 
-      }
+       }
 
     }
 
 
     @Override
     public List<CompanyPlan> getcompanyPlans() throws IOException{
-     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-     if(authentication == null){
-         throw new BadRequestException("you are not authorized to do the action");
-     }
-
-     String companyName = authentication.getCredentials().toString();
+     String companyName = authrnticationCheck();
 
      Optional<Company> isCompanyActive = companyRepo.findByName(companyName);
 
@@ -175,15 +167,9 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService{
     
 
     @Override
-    public PlansStatisticsResposeDto getPlansStatistics() throws BadRequestException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if(authentication == null){
-            throw new BadRequestException("you are not authorized to do the action");
-        }
-   
-        String companyName = authentication.getCredentials().toString();
-   
+    public PlansStatisticsResposeDto getPlansStatistics() throws IOException {
+       String companyName = authrnticationCheck();
+       
         Optional<Company> isCompanyActive = companyRepo.findByName(companyName);
    
         if (!isCompanyActive.isPresent() || isCompanyActive.get().getActive() == false) {
@@ -213,14 +199,8 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService{
 
 
     @Override
-    public CompanyPlan getCompanyPlan(Long planId) throws BadRequestException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if(authentication == null){
-            throw new BadRequestException("you are not authorized to do the action");
-        }
-   
-        String companyName = authentication.getCredentials().toString();
+    public CompanyPlan getCompanyPlan(Long planId) throws IOException {
+        String companyName = authrnticationCheck();
    
         Optional<Company> isCompanyActive = companyRepo.findByName(companyName);
    
@@ -230,6 +210,16 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService{
 
         return companyPlanRepo.findById(planId).get();
 
+    }
+
+    private String authrnticationCheck() throws IOException{
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if(authentication == null){
+            throw new BadRequestException("you are not authorized to do the action");
+        }
+   
+        return authentication.getCredentials().toString();
     }
 
     

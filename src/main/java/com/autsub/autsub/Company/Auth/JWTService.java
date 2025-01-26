@@ -28,11 +28,11 @@ public class JWTService {
     private long jwtExpiration;
 
 
-    public String extractUsername(String token) {
+    public String extractCompanyName(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-
+   
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
@@ -55,17 +55,16 @@ public class JWTService {
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
+                .setSubject(userDetails.getUsername()) // the user name here is the Company name 
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256) // secret kay set and its algorithm of signature
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
 
-    
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
+        final String username = extractCompanyName(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token) && validateToken(token);
     }
 

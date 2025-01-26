@@ -27,9 +27,10 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
     }
 
     @Override
-    public PlanResponseDto createCompanyPlan(PlanRequestDto planRequestDto){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Optional<Company> iscompanyActive = companyRepo.findByName(authentication.getCredentials().toString());
+    public PlanResponseDto createCompanyPlan(PlanRequestDto planRequestDto) throws IOException{
+       String companyName = authrnticationCheck();
+
+        Optional<Company> iscompanyActive = companyRepo.findByName(companyName);
 
         if (!iscompanyActive.isPresent() || iscompanyActive.get().getActive() == false) {
             throw new NotActiveAccountException();
@@ -53,8 +54,9 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
 
     @Override
     public void updatePlanData(PlanRequestDto planRequestDto) throws IOException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Optional<Company> iscompanyActive = companyRepo.findByName(authentication.getCredentials().toString());
+        String companyName = authrnticationCheck();
+
+        Optional<Company> iscompanyActive = companyRepo.findByName(companyName);
 
         if (!iscompanyActive.isPresent() || iscompanyActive.get().getActive() == false) {
             throw new NotActiveAccountException();
@@ -82,12 +84,8 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
 
 
     @Override
-    public void providOffer(Long planId, int offerPrice){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        
-        if(authentication == null){
-            throw new BadRequestException("you are not authorized to do this action");
-        }
+    public void providOffer(Long planId, int offerPrice) throws IOException{
+       authrnticationCheck();
 
        Optional<CompanyPlan> isPlanExists = companyPlanRepo.findById(planId);
 
@@ -103,12 +101,8 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
 
 
     @Override
-    public void deletePlan(Long palnId){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication == null) {
-            throw new BadRequestException("you are not authorized to do this action");
-        }
+    public void deletePlan(Long palnId) throws IOException{
+       authrnticationCheck();
 
         companyPlanRepo.deleteById(palnId);
     }
@@ -116,13 +110,7 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
 
     @Override
     public List<CompanyPlan> getcompanyPlans() throws IOException{
-     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-     if(authentication == null){
-         throw new BadRequestException("you are not authorized to do the action");
-     }
-
-     String companyName = authentication.getCredentials().toString();
+     String companyName = authrnticationCheck();
 
      Optional<Company> isCompanyActive = companyRepo.findByName(companyName);
 
@@ -137,6 +125,17 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
          }
 
        return companyPlans.get(); 
+    }
+
+
+    private String authrnticationCheck() throws IOException{
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if(authentication == null){
+            throw new BadRequestException("you are not authorized to do the action");
+        }
+   
+        return authentication.getCredentials().toString();
     }
 
 

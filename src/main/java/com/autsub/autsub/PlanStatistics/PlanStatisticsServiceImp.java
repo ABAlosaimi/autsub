@@ -1,6 +1,7 @@
 package com.autsub.autsub.PlanStatistics;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import org.apache.coyote.BadRequestException;
 import org.springframework.security.core.Authentication;
@@ -10,7 +11,9 @@ import com.autsub.autsub.Company.Company;
 import com.autsub.autsub.Company.CompanyRepo;
 import com.autsub.autsub.CompanyPlan.CompanyPlan;
 import com.autsub.autsub.CompanyPlan.CompanyPlanRepo;
+import com.autsub.autsub.Exception.NotActiveAccountException;
 import com.autsub.autsub.Exception.UnauthorizedException;
+import com.autsub.autsub.PlanStatistics.Dto.PlansStatisticsResposeDto;
 import com.autsub.autsub.PlanStatistics.Dto.StaticPlansDto;
 
 @Service
@@ -75,7 +78,7 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService{
 
 
     @Override
-    public void StumbledPlan(Long planId, String companyName, String stumbleReason) throws BadRequestException{
+    public void stumbledPlan(Long planId, String companyName, String stumbleReason) throws BadRequestException{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if(authentication == null){
@@ -143,5 +146,91 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService{
       }
 
     }
+
+
+    @Override
+    public List<CompanyPlan> getcompanyPlans() throws IOException{
+     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+     if(authentication == null){
+         throw new BadRequestException("you are not authorized to do the action");
+     }
+
+     String companyName = authentication.getCredentials().toString();
+
+     Optional<Company> isCompanyActive = companyRepo.findByName(companyName);
+
+     if (!isCompanyActive.isPresent() || isCompanyActive.get().getActive() == false) {
+          throw new NotActiveAccountException();
+        }
+
+     Optional<List<CompanyPlan>> companyPlans = companyPlanRepo.findAllByComoanyName(companyName);
+
+        if(!companyPlans.isPresent()){
+            throw new BadRequestException("the plan is not exists");
+         }
+
+       return companyPlans.get(); 
+    }
+    
+
+    @Override
+    public PlansStatisticsResposeDto getPlansStatistics() throws BadRequestException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if(authentication == null){
+            throw new BadRequestException("you are not authorized to do the action");
+        }
+   
+        String companyName = authentication.getCredentials().toString();
+   
+        Optional<Company> isCompanyActive = companyRepo.findByName(companyName);
+   
+        if (!isCompanyActive.isPresent() || isCompanyActive.get().getActive() == false) {
+             throw new NotActiveAccountException();
+           }
+
+          Optional<List<CompanyPlan>> companyPlans =  companyPlanRepo.findAllByComoanyName(companyName);
+
+          if (!companyPlans.isPresent()) {
+            throw new BadRequestException("theres no plans"); 
+          }
+
+          List<CompanyPlan> certnCompanyPlans = companyPlans.get();
+
+          PlansStatisticsResposeDto plansStatisticsResposeDto = new PlansStatisticsResposeDto();
+     
+          for(int i =0; i<certnCompanyPlans.size(); i++){
+            plansStatisticsResposeDto.setSubscription(certnCompanyPlans.get(i).getSubscriptions());
+            plansStatisticsResposeDto.setCancelation(certnCompanyPlans.get(i).getCancelation());
+            plansStatisticsResposeDto.setStumbled_subscription(certnCompanyPlans.get(i).getStumbled_subscription());
+            plansStatisticsResposeDto.setStumbleReason(certnCompanyPlans.get(i).getStumbleReason());
+          }
+
+        
+        return plansStatisticsResposeDto;
+    }
+
+
+    @Override
+    public CompanyPlan getCompanyPlan(Long planId) throws BadRequestException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if(authentication == null){
+            throw new BadRequestException("you are not authorized to do the action");
+        }
+   
+        String companyName = authentication.getCredentials().toString();
+   
+        Optional<Company> isCompanyActive = companyRepo.findByName(companyName);
+   
+        if (!isCompanyActive.isPresent() || isCompanyActive.get().getActive() == false) {
+             throw new NotActiveAccountException();
+           }
+
+        return companyPlanRepo.findById(planId).get();
+
+    }
+
     
  }

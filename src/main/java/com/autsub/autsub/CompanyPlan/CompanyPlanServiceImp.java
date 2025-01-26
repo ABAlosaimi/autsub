@@ -1,7 +1,9 @@
 package com.autsub.autsub.CompanyPlan;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -80,7 +82,7 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
 
 
     @Override
-    public void providOffer(Long planId){
+    public void providOffer(Long planId, int offerPrice){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         
         if(authentication == null){
@@ -95,7 +97,7 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
 
         CompanyPlan companyPlan = isPlanExists.get();
 
-        companyPlanRepo.updateCompanyPlanLastOffer(companyPlan.getId());
+        companyPlanRepo.updateCompanyPlanLastOffer(companyPlan.getId(), offerPrice);
         
     }
 
@@ -110,5 +112,32 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
 
         companyPlanRepo.deleteById(palnId);
     }
-   
+
+
+    @Override
+    public List<CompanyPlan> getcompanyPlans() throws IOException{
+     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+     if(authentication == null){
+         throw new BadRequestException("you are not authorized to do the action");
+     }
+
+     String companyName = authentication.getCredentials().toString();
+
+     Optional<Company> isCompanyActive = companyRepo.findByName(companyName);
+
+     if (!isCompanyActive.isPresent() || isCompanyActive.get().getActive() == false) {
+          throw new NotActiveAccountException();
+        }
+
+     Optional<List<CompanyPlan>> companyPlans = companyPlanRepo.findAllByComoanyName(companyName);
+
+        if(!companyPlans.isPresent()){
+            throw new BadRequestException("the plan is not exists");
+         }
+
+       return companyPlans.get(); 
+    }
+
+
  }

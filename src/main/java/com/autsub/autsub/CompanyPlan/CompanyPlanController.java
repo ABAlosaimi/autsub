@@ -42,8 +42,8 @@ public class CompanyPlanController {
     }
 
     @PutMapping("/offer")
-    public ResponseEntity<Object> providOffer(Long planId) {
-        companyPlanService.providOffer(planId);
+    public ResponseEntity<Object> providOffer(Long planId, int offerPrice) {
+        companyPlanService.providOffer(planId, offerPrice);
 
         return ResponseEntity.status(200).build();
                              
@@ -56,5 +56,6 @@ public class CompanyPlanController {
         return ResponseEntity.status(204).build();
                              
     }
+
 
 }

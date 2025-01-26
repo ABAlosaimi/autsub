@@ -1,5 +1,6 @@
 package com.autsub.autsub.CompanyPlan;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,8 +20,8 @@ public interface CompanyPlanRepo extends JpaRepository<CompanyPlan, Long> {
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE company_plan cp SET cp.last_offer_price = cp.last_offer_price + 1, cp.last_offer_date = NOW() WHERE cp.id = ?1", nativeQuery = true)
-    void updateCompanyPlanLastOffer(Long id);
+    @Query(value = "UPDATE company_plan cp SET cp.last_offer_price = ?2, cp.last_offer_date = NOW() WHERE cp.id = ?1", nativeQuery = true)
+    void updateCompanyPlanLastOffer(Long id, int offerPrice);
 
     @Modifying
     @Transactional
@@ -42,5 +43,7 @@ public interface CompanyPlanRepo extends JpaRepository<CompanyPlan, Long> {
     @Transactional
     @Query(value = "INSERT INTO company_plan (title, category, info, recurring, price, trial, company_name) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)", nativeQuery = true)
     void insertCompanyPlan(String title, String category, String info, String recurring, int price, boolean trial);
+
+    Optional<List<CompanyPlan>> findAllByComoanyName(String companyName);
 
 }

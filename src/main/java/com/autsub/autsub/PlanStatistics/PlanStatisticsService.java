@@ -1,10 +1,17 @@
 package com.autsub.autsub.PlanStatistics;
 
+import java.util.List;
+import com.autsub.autsub.CompanyPlan.CompanyPlan;
+import com.autsub.autsub.PlanStatistics.Dto.PlansStatisticsResposeDto;
 import com.autsub.autsub.PlanStatistics.Dto.StaticPlansDto;
 
 public interface PlanStatisticsService {
    void newSubscription(Long planId, String companyName) throws Exception;
    void cancelationOfsubscription(Long planId, String companyName) throws Exception;
-   void StumbledPlan(Long planId, String companyName, String stumbleReasone) throws Exception;
+   void stumbledPlan(Long planId, String companyName, String stumbleReasone) throws Exception;
    void insertStaticCompanyPlan(StaticPlansDto staticPlansDto) throws Exception;
+
+   List<CompanyPlan> getcompanyPlans() throws Exception;
+   PlansStatisticsResposeDto getPlansStatistics() throws Exception;
+   CompanyPlan getCompanyPlan(Long planId) throws Exception;
 } 

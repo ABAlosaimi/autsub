@@ -64,7 +64,7 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
 
         Company company = iscompanyActive.get();
 
-        Optional<CompanyPlan> companyPlan = companyPlanRepo.findByCompany_name(company.getName());
+        Optional<CompanyPlan> companyPlan = companyPlanRepo.findByCompanyName(company);
 
         if (!companyPlan.isPresent()) {
             throw new BadRequestException("Company plan not found");
@@ -118,7 +118,7 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
           throw new NotActiveAccountException();
         }
 
-     Optional<List<CompanyPlan>> companyPlans = companyPlanRepo.findAllByComoanyName(companyName);
+     Optional<List<CompanyPlan>> companyPlans = companyPlanRepo.findAllByCompanyName(isCompanyActive.get());
 
         if(!companyPlans.isPresent()){
             throw new BadRequestException("the plan is not exists");

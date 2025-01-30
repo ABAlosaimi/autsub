@@ -2,13 +2,10 @@ package com.autsub.autsub.Company;
 
 import java.util.Collection;
 import java.util.List;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import com.autsub.autsub.CompanyPlan.CompanyPlan;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -43,9 +40,9 @@ public class Company implements UserDetails{
      @Id
      @GeneratedValue(strategy = GenerationType.IDENTITY) 
      private Long id;
- 
-     @OneToMany(mappedBy = "company_name", cascade = CascadeType.ALL)
+     
      @JsonIgnore
+     @OneToMany(mappedBy = "companyName" , cascade = CascadeType.ALL)
      private List<CompanyPlan> companyPlan;
 
      @NotBlank(message = "Name is mandatory")
@@ -58,7 +55,7 @@ public class Company implements UserDetails{
      private String email;
 
     @NotBlank(message = "Password is mandatory")
-    @Column(columnDefinition = "VARCHAR(12) NOT NULL CHECK (LENGTH(password) >= 8 AND LENGTH(password) <= 12)")
+    @Column(columnDefinition = "VARCHAR(255) NOT NULL")
      private String password;
 
     @NotBlank(message = "Address is mandatory")

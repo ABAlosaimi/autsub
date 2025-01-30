@@ -36,7 +36,7 @@ import java.util.List;
         http
                 .csrf(AbstractHttpConfigurer::disable) // for dev only
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/company/auth/**","/v3")
+                        .requestMatchers("/company/auth/**","/v3","/error")
                         .permitAll() 
                         .anyRequest()
                         .authenticated()

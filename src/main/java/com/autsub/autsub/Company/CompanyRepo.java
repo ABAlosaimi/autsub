@@ -6,12 +6,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface CompanyRepo extends JpaRepository<Company, Long> {
     Optional<Company> findByName(String name);
+    Optional<Company> findByEmail(String email);
 
     @Modifying
-    @Query("UPDATE company c SET c.email = ?1, c.address = ?2 WHERE c.email = ?1 AND c.address = ?2")
+    @Transactional
+    @Query(value = "UPDATE company c SET c.email = ?1, c.address = ?2 WHERE c.email = ?1", nativeQuery = true)
     void updateCompanyEmailAndAddress(String email, String address);
 }

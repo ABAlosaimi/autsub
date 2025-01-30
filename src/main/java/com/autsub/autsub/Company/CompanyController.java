@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.autsub.autsub.Company.Dto.LoginRequestDto;
 import com.autsub.autsub.Company.Dto.PasswordRestRequest;
 import com.autsub.autsub.Company.Dto.RigterRequestDto;
+import com.autsub.autsub.Company.Dto.RigterResponse;
 import com.autsub.autsub.Company.Dto.UpdateCompanyDataDto;
 
 import jakarta.validation.Valid;
@@ -31,11 +32,11 @@ public class CompanyController {
 
     @PostMapping("/auth/register")
     public ResponseEntity<Object> registerCompany(@Valid @RequestBody RigterRequestDto rigterRequestDto) throws Exception {
-        compnayService.registerCompany(rigterRequestDto);
+        RigterResponse response = compnayService.registerCompany(rigterRequestDto);
         
         return ResponseEntity.status(201)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(compnayService.registerCompany(rigterRequestDto));
+                             .body(response);
     }   
 
 

@@ -152,11 +152,11 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService{
 
      Optional<Company> isCompanyActive = companyRepo.findByName(companyName);
 
-     if (!isCompanyActive.isPresent() || isCompanyActive.get().getActive() == false) {
+       if (!isCompanyActive.isPresent() || isCompanyActive.get().getActive() == false) {
           throw new NotActiveAccountException();
         }
 
-     Optional<List<CompanyPlan>> companyPlans = companyPlanRepo.findAllByComoanyName(companyName);
+     Optional<List<CompanyPlan>> companyPlans = companyPlanRepo.findAllByCompanyName(isCompanyActive.get());
 
         if(!companyPlans.isPresent()){
             throw new BadRequestException("the plan is not exists");
@@ -176,7 +176,7 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService{
              throw new NotActiveAccountException();
            }
 
-          Optional<List<CompanyPlan>> companyPlans =  companyPlanRepo.findAllByComoanyName(companyName);
+          Optional<List<CompanyPlan>> companyPlans = companyPlanRepo.findAllByCompanyName(isCompanyActive.get());
 
           if (!companyPlans.isPresent()) {
             throw new BadRequestException("theres no plans"); 
@@ -208,9 +208,9 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService{
              throw new NotActiveAccountException();
            }
 
-        return companyPlanRepo.findById(planId).get();
-
+        return companyPlanRepo.findById(planId).orElse(null);
     }
+
 
     private String authrnticationCheck() throws IOException{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

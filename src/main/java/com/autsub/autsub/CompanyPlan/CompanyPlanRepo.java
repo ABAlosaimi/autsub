@@ -9,9 +9,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.autsub.autsub.Company.Company;
+
 @Repository
 public interface CompanyPlanRepo extends JpaRepository<CompanyPlan, Long> {
-    Optional<CompanyPlan> findByCompany_name(String company_name);
+    Optional<CompanyPlan> findByCompanyName(Company company);
      
     @Modifying
     @Transactional
@@ -44,6 +46,6 @@ public interface CompanyPlanRepo extends JpaRepository<CompanyPlan, Long> {
     @Query(value = "INSERT INTO company_plan (title, category, info, recurring, price, trial, company_name) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)", nativeQuery = true)
     void insertCompanyPlan(String title, String category, String info, String recurring, int price, boolean trial);
 
-    Optional<List<CompanyPlan>> findAllByComoanyName(String companyName);
+    Optional<List<CompanyPlan>> findAllByCompanyName(Company companyName);
 
 }

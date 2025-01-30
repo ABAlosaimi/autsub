@@ -39,7 +39,7 @@ import java.io.IOException;
 
            String requestPath = request.getRequestURI();
 
-           if (requestPath.startsWith("/company/auth/") && (requestPath.endsWith("/regiester") || requestPath.endsWith("/login"))){
+           if (requestPath.startsWith("/company/auth")){
                filterChain.doFilter(request,response);
                return;
            }
@@ -54,15 +54,14 @@ import java.io.IOException;
                 
                 final String token = authHeader.substring(7);
 
-                final String comapayName = jwtService.extractCompanyName(token);
+                final String comapanyName = jwtService.extractCompanyName(token);
 
                 
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-                if (comapayName != null && authentication == null) { 
+                if (comapanyName != null && authentication == null) { 
 
-                   
-                    UserDetails userDetails = this.userDetailsService.loadUserByUsername(comapayName);
+                    UserDetails userDetails = this.userDetailsService.loadUserByUsername(comapanyName);
 
                    
                     if (jwtService.isTokenValid(token, userDetails)) {

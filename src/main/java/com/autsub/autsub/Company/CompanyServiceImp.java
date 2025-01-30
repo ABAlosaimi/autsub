@@ -32,16 +32,14 @@ public class CompanyServiceImp implements CompnayService {
 
     @Override
     public RigterResponse registerCompany(RigterRequestDto rigterRequestDto) throws Exception {
-       Optional<Company> company = companyRepo.findByName(rigterRequestDto.getName());
+       Optional<Company> isCompanyExists = companyRepo.findByEmail(rigterRequestDto.getEmail());
 
-       if (company.isPresent()) {
+       if (isCompanyExists.isPresent()) {
           throw new BadRequestException("you are already rigsterd, try to login");
        }
 
-       // sendin OTP functionality to company's email
-       
        rigterRequestDto.setPassword(passwordEncoder.encode(rigterRequestDto.getPassword()));
-
+      
        Company newCompnay = new Company(
         rigterRequestDto.getName(), 
         rigterRequestDto.getPassword(),
@@ -56,13 +54,12 @@ public class CompanyServiceImp implements CompnayService {
         String accessToken = jwtService.generateToken(newCompnay); 
 
         return new RigterResponse(accessToken);
-
     }
    
 
     @Override
     public LoginResponseDto Companylogin(LoginRequestDto loginRequestDto) throws Exception {
-        Optional<Company> iscompanyExists = companyRepo.findByName(loginRequestDto.getEmail());
+        Optional<Company> iscompanyExists = companyRepo.findByEmail(loginRequestDto.getEmail());
 
         if (iscompanyExists.isEmpty()) {
             throw new BadRequestException("something went wrong, duble check your email or password");
@@ -83,13 +80,12 @@ public class CompanyServiceImp implements CompnayService {
     @Override
     public void emailAndaddressUpdate(UpdateCompanyDataDto updateCompanyDataDto) throws Exception {
         companyRepo.updateCompanyEmailAndAddress(updateCompanyDataDto.getEmail(), updateCompanyDataDto.getAddress());
-
     }
 
      @Override
      public void updateCompnayPassword(PasswordRestRequest passwordRestRequest) throws IOException{
        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-       Optional<Company> isCompanyExists = companyRepo.findByName(authentication.getCredentials().toString());
+       Optional<Company> isCompanyExists = companyRepo.findByName(authentication.getName());
 
          if (isCompanyExists.isEmpty()) {
               throw new BadRequestException("the account you are trying to update is not found");
@@ -111,7 +107,7 @@ public class CompanyServiceImp implements CompnayService {
 
      public void deleteCompany() throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Optional<Company> isCompanyExists = companyRepo.findByName(authentication.getCredentials().toString());
+        Optional<Company> isCompanyExists = companyRepo.findByName(authentication.getName());
 
         if (isCompanyExists.isEmpty()) {
             throw new BadRequestException("the account you are trying to delete is not found");

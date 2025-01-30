@@ -28,9 +28,9 @@ public class CompanyPlan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(targetEntity = Company.class)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "company_name", referencedColumnName = "name", nullable = false, updatable = true)
-    private Company company_name;
+    private Company companyName;
       
     @Column(name = "titel", nullable = false)
     @NotBlank(message = "Titel is mandatory")
@@ -67,22 +67,22 @@ public class CompanyPlan {
     private String stumbleReason;
 
     @Column(name = "last_offer_price", nullable = true)
-    private double last_offer_price;
+    private double lastOfferPrice;
 
     @Column(name = "last_offer_date",  nullable = true)
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date last_offer_date;
+    private Date lastOfferDate;
 
 
     public void setLast_offer_date(String last_offer_date) {
-        this.last_offer_date = Date.from(Instant.parse(last_offer_date));
+        this.lastOfferDate = Date.from(Instant.parse(last_offer_date));
     }
 
     public CompanyPlan() {
     }
 
     public CompanyPlan(String titel, String category, String description, String recurring, int price, boolean trial, Company company_name) {
-        this.company_name = company_name;
+        this.companyName = company_name;
         this.titel = titel;
         this.category = category;
         this.description = description;

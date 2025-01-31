@@ -2,13 +2,11 @@ package com.autsub.autsub.CompanyPlan;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.autsub.autsub.Company.Company;
 
 @Repository
@@ -17,28 +15,28 @@ public interface CompanyPlanRepo extends JpaRepository<CompanyPlan, Long> {
      
     @Modifying
     @Transactional
-    @Query(value = "UPDATE company_plan cp SET cp.title = ?1, cp.category = ?2, cp.info = ?3, cp.recurring = ?4, cp.price = ?5, cp.trial = ?6 WHERE cp.title = ?1 AND cp.category = ?2 AND cp.info = ?3 AND cp.recurring = ?4 AND cp.price = ?5 AND cp.trial = ?6", nativeQuery = true)
+    @Query(value = "UPDATE company_plan  SET title = ?1, category = ?2, info = ?3, recurring = ?4, price = ?5, trial = ?6 WHERE title = ?1 AND category = ?2 AND info = ?3 AND recurring = ?4 AND price = ?5 AND trial = ?6", nativeQuery = true)
     void updateCompanyPlan(String title, String category, String info, String recurring, String price, String trial);
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE company_plan cp SET cp.last_offer_price = ?2, cp.last_offer_date = NOW() WHERE cp.id = ?1", nativeQuery = true)
+    @Query(value = "UPDATE company_plan SET last_offer_price = ?2, last_offer_date = NOW() WHERE id = ?1", nativeQuery = true)
     void updateCompanyPlanLastOffer(Long id, int offerPrice);
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE company_plan cp SET cp.subscription = cp.subscription + 1 WHERE cp.id = ?1", nativeQuery = true)
+    @Query(value = "UPDATE company_plan SET subscriptions = subscriptions + 1 WHERE id = ?1", nativeQuery = true)
     void updateCompanyPlanSubscription(Long planId);
 
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE company_plan cp SET cp.cancelation = cp.cancelation + 1 WHERE cp.id = ?1", nativeQuery = true)
+    @Query(value = "UPDATE company_plan  SET cancelation = cancelation + 1 WHERE id = ?1", nativeQuery = true)
     void updateCompanyPlanCancelation(Long planId);
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE company_plan cp SET cp.stumbled_subscription = cp.stumbled_subscription + 1, cp.stumble_reason = ?2WHERE cp.id = ?1", nativeQuery = true)
+    @Query(value = "UPDATE company_plan  SET stumbled_subscription = stumbled_subscription + 1, stumble_reason = ?2WHERE id = ?1", nativeQuery = true)
     void updateCompanyPlanStumbledSubscription(Long planId, String stumbleReasone);
 
     @Modifying

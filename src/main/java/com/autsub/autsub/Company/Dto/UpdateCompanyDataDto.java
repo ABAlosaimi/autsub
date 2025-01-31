@@ -12,6 +12,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateCompanyDataDto {
+
+     @NotBlank(message = "the name is blank")
+     private String name;
  
      @NotBlank(message = "Email is mandatory")
      @Email(message = "Email should be in valid format")

@@ -1,6 +1,7 @@
 package com.autsub.autsub.Exception;
 
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -55,11 +56,31 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
      }
 
-     @ExceptionHandler(NotActiveAccountException.class)
+      @ExceptionHandler(NotActiveAccountException.class)
       public ResponseEntity<Object> notActiveAccountExceptionHandler(NotActiveAccountException ex){
          errorResponse.setMessage(List.of(ex.getMessage()));
          errorResponse.setLocalTime(LocalTime.now());
+
          return new ResponseEntity<>(errorResponse,HttpStatus.BAD_REQUEST);
       }
+
+      @ExceptionHandler(DataIntegrityViolationException.class)
+      public ResponseEntity<Object> dataIntegrityException(DataIntegrityViolationException ex){
+          errorResponse.setMessage(List.of(ex.getMessage()));
+          errorResponse.setLocalTime(LocalTime.now());
+
+          return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+
+      }
+
+
+      @ExceptionHandler(IllegalAccessError.class)
+      public ResponseEntity<Object> illegalAccessError(IllegalAccessError ex){
+        errorResponse.setMessage(List.of(ex.getMessage()));
+        errorResponse.setLocalTime(LocalTime.now());
+        
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+      }
+
 
  }

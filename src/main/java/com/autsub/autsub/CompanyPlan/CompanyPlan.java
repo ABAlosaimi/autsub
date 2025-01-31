@@ -48,7 +48,6 @@ public class CompanyPlan {
     private String recurring;
     
     @Column(name = "price", nullable = false)
-    @NotBlank(message = "Price is mandatory")
     private int price;
     
     @Column(name = "trial", nullable = true)

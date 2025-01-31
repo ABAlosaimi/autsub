@@ -1,13 +1,8 @@
 package com.autsub.autsub.Company.Dto;
 
 import com.autsub.autsub.Annos.ValidatePassword;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 
 public class RigterRequestDto {
@@ -50,7 +45,6 @@ public class RigterRequestDto {
      private String industry;
 
      @NotBlank(message = "Commercial Registration Number is mandatory")
-     @JsonProperty("commercial_Registration_Number")
      private String commercial_Registration_Number;
 
     public void setName(String name) {

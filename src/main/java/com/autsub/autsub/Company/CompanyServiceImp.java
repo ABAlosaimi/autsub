@@ -79,7 +79,7 @@ public class CompanyServiceImp implements CompnayService {
 
     @Override
     public void emailAndaddressUpdate(UpdateCompanyDataDto updateCompanyDataDto) throws Exception {
-        companyRepo.updateCompanyEmailAndAddress(updateCompanyDataDto.getEmail(), updateCompanyDataDto.getAddress());
+        companyRepo.updateCompanyEmailAndAddress(updateCompanyDataDto.getEmail(), updateCompanyDataDto.getAddress(), updateCompanyDataDto.getName());
     }
 
      @Override

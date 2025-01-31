@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.autsub.autsub.CompanyPlan.CompanyPlan;
 import com.autsub.autsub.PlanStatistics.Dto.PlansStatisticsResposeDto;
 import com.autsub.autsub.PlanStatistics.Dto.StaticPlansDto;
+import com.autsub.autsub.PlanStatistics.Dto.SubReq;
 
 import jakarta.validation.constraints.NotBlank;
 
@@ -28,8 +29,8 @@ public class PlanStatisticsController {
 
 
     @PutMapping("/gather-new")
-    public ResponseEntity<Object> newSubscription(@NotBlank @RequestBody Long planId) throws Exception{
-      planStatisticsService.newSubscription(planId);
+    public ResponseEntity<Object> newSubscription(@RequestBody SubReq subreq) throws Exception{
+      planStatisticsService.newSubscription(subreq.getPlanId());
 
       return ResponseEntity.status(200).build();
     }

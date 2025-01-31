@@ -15,6 +15,6 @@ public interface CompanyRepo extends JpaRepository<Company, Long> {
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE company c SET c.email = ?1, c.address = ?2 WHERE c.email = ?1", nativeQuery = true)
-    void updateCompanyEmailAndAddress(String email, String address);
+    @Query(value = "UPDATE company SET email = ?1, address = ?2 WHERE name = ?3", nativeQuery = true)
+    void updateCompanyEmailAndAddress(String email, String address, String name);
 }

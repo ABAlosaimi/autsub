@@ -34,7 +34,7 @@ public class Company implements UserDetails{
         this.email = email;
         this.address = address;
         this.industry = industry;
-        this.Commercial_Registration_Number = Commercial_Registration_Number;
+        this.commercial_Registration_Number = Commercial_Registration_Number;
     }
    
      @Id
@@ -68,7 +68,7 @@ public class Company implements UserDetails{
 
      @NotBlank(message = "Commercial Registration Number is mandatory")
      @Column(columnDefinition = "VARCHAR(10) NOT NULL CHECK (LENGTH(Commercial_Registration_Number) = 10)")
-     private String Commercial_Registration_Number;
+     private String commercial_Registration_Number;
 
      @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
      private boolean active;

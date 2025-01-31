@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.autsub.autsub.CompanyPlan.Dto.PlanRequestDto;
+import com.autsub.autsub.CompanyPlan.Dto.PlanResponseDto;
+
+import org.springframework.web.bind.annotation.RequestBody;
+import jakarta.validation.Valid;
 
 
 @RestController
@@ -24,17 +28,17 @@ public class CompanyPlanController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Object> createCompanyPlan(PlanRequestDto planRequestDto) throws IOException {
-         companyPlanService.createCompanyPlan(planRequestDto);
+    public ResponseEntity<Object> createCompanyPlan(@Valid @RequestBody PlanRequestDto planRequestDto) throws IOException {
+        PlanResponseDto response = companyPlanService.createCompanyPlan(planRequestDto);
 
          return ResponseEntity.status(201)
                                  .contentType(MediaType.APPLICATION_JSON)
-                                 .body(companyPlanService.createCompanyPlan(planRequestDto));
+                                 .body(response);
     }
 
 
     @PutMapping("/update")
-    public ResponseEntity<Object> updatePlanData(PlanRequestDto planRequestDto) throws IOException {
+    public ResponseEntity<Object> updatePlanData(@Valid @RequestBody PlanRequestDto planRequestDto) throws IOException {
         companyPlanService.updatePlanData(planRequestDto);
 
         return ResponseEntity.status(200).build();
@@ -42,7 +46,7 @@ public class CompanyPlanController {
     }
 
     @PutMapping("/offer")
-    public ResponseEntity<Object> providOffer(Long planId, int offerPrice) throws Exception {
+    public ResponseEntity<Object> providOffer(@RequestBody Long planId, @RequestBody int offerPrice) throws Exception {
         companyPlanService.providOffer(planId, offerPrice);
 
         return ResponseEntity.status(200).build();
@@ -50,7 +54,7 @@ public class CompanyPlanController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<Object> deletePlan(Long planId) throws Exception {
+    public ResponseEntity<Object> deletePlan(@RequestBody Long planId) throws Exception {
         companyPlanService.deletePlan(planId);
 
         return ResponseEntity.status(204).build();

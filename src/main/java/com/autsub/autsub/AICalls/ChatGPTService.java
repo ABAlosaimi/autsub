@@ -4,6 +4,8 @@ package com.autsub.autsub.AICalls;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.autsub.autsub.AICalls.Config.RateLimiter;
+
 import org.springframework.http.*;
 
 @Service
@@ -15,9 +17,18 @@ public class ChatGPTService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
+    private final RateLimiter rateLimiter;
+
+    public ChatGPTService(){
+      this.rateLimiter = new RateLimiter(60);
+    }
+
 
     @SuppressWarnings("null")
     public String getChatGPTResponse(ChatRequest chatRequest) {
+        if (!rateLimiter.tryConsume()) {
+            throw new RuntimeException("Rate limit exceeded. Please try again later.");
+        }
        
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

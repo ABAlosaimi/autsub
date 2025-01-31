@@ -24,11 +24,30 @@ A Spring Boot REST API for managing company subscriptions palns by providing a l
 ### Response
 
 - **Status code**: `201`
-- response body:
+- **response body**:
   ```json
   { "accessToken": "ACCESS_TOKEN"}
 
 ---
+
+### Company login 
+- **Method**: `GET`
+- **Endpoint**: `/company/auth/login`
+- **Request Body** (JSON):
+   ```json
+   {
+    "email": "String",
+     "password": "String"
+   }
+### Response 
+- **Status code**: `200`
+- **response body**:
+  ```json
+  { "accessToken": "ACCESS_TOKEN"}
+
+---
+
+
 
   
   

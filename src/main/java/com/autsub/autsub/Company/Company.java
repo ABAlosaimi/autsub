@@ -49,9 +49,9 @@ public class Company implements UserDetails{
      @Column(name = "name", nullable = false, unique = true)
      private String name;
 
-    @NotBlank(message = "Email is mandatory")
-    @Column(name = "email", nullable = false, unique = true)
-    @Email(message = "Email should be in valid format")
+     @NotBlank(message = "Email is mandatory")
+     @Column(name = "email", nullable = false, unique = true)
+     @Email(message = "Email should be in valid format")
      private String email;
 
     @NotBlank(message = "Password is mandatory")

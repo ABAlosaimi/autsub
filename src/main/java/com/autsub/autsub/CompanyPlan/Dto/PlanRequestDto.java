@@ -83,7 +83,5 @@ public class PlanRequestDto {
     public int getPrice() {
         return price;
     }
-
-
-    
+ 
 }

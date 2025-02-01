@@ -10,15 +10,17 @@ import com.autsub.autsub.Exception.APIcallFailedException;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.coyote.BadRequestException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 
 @Service
 public class ChatGPTService {
     
-    private String apiKey = "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";
+    @Value("${OPEN_AI_KEY}")
+    private String apiKey;
 
-    private String apiUrl = "https://api.openai.com/v1/chat/completions";
+    @Value("${OPEN_AI_URL}")
+    private String apiUrl;
 
     private final RestTemplate restTemplate = new RestTemplate();
 

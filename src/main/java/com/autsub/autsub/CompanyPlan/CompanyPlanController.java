@@ -38,8 +38,8 @@ public class CompanyPlanController {
 
 
     @PutMapping("/update")
-    public ResponseEntity<Object> updatePlanData(@Valid @RequestBody PlanRequestDto planRequestDto) throws IOException {
-        companyPlanService.updatePlanData(planRequestDto);
+    public ResponseEntity<Object> updatePlanData(@Valid @RequestBody PlanRequestDto planRequestDto, @RequestBody Long planID) throws IOException {
+        companyPlanService.updatePlanData(planRequestDto, planID);
 
         return ResponseEntity.status(200).build();
                              

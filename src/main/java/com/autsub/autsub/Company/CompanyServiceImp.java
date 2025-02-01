@@ -18,6 +18,7 @@ import com.autsub.autsub.Company.Dto.PasswordRestRequest;
 import com.autsub.autsub.Company.Dto.RigterRequestDto;
 import com.autsub.autsub.Company.Dto.RigterResponse;
 import com.autsub.autsub.Company.Dto.UpdateCompanyDataDto;
+import com.autsub.autsub.Company.Dto.UpdateIdentityOfCompnay;
 import com.autsub.autsub.CompanyPlan.CompanyPlan;
 import com.autsub.autsub.CompanyPlan.CompanyPlanRepo;
 
@@ -106,6 +107,7 @@ public class CompanyServiceImp implements CompnayService {
         companyRepo.updateCompanyEmailAndAddress(updateCompanyDataDto.getEmail(), updateCompanyDataDto.getAddress(), updateCompanyDataDto.getName());
     }
 
+
      @Override
      public void updateCompnayPassword(PasswordRestRequest passwordRestRequest) throws IOException{
        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -115,18 +117,24 @@ public class CompanyServiceImp implements CompnayService {
               throw new BadRequestException("the account you are trying to update is not found");
          }
 
-         String password = passwordRestRequest.getPassword();
+         String newPassword = passwordRestRequest.getNewPassword();
          Company company = isCompanyExists.get();
 
-         if (!passwordEncoder.matches(password, company.getPassword())) {
+         if (!passwordEncoder.matches(passwordRestRequest.getOldPassword(), company.getPassword())) {
              throw new BadRequestException("the password you entered is not correct");
          }
 
-         company.setPassword(passwordEncoder.encode(password));
+         company.setPassword(passwordEncoder.encode(newPassword));
 
          companyRepo.save(company);
 
      }
+
+     @Override
+     public void updateCompanyidentifyDat(UpdateIdentityOfCompnay updateIdentityOfCompnay){
+        companyRepo.updateCompanyidentifyDat(updateIdentityOfCompnay.getName(), updateIdentityOfCompnay.getIndustry(), updateIdentityOfCompnay.getCommercial_Registration_Number());
+     }
+
 
 
      public void deleteCompany() throws IOException {

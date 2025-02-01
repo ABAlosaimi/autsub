@@ -15,8 +15,8 @@ public interface CompanyPlanRepo extends JpaRepository<CompanyPlan, Long> {
      
     @Modifying
     @Transactional
-    @Query(value = "UPDATE company_plan  SET title = ?1, category = ?2, info = ?3, recurring = ?4, price = ?5, trial = ?6 WHERE title = ?1 AND category = ?2 AND info = ?3 AND recurring = ?4 AND price = ?5 AND trial = ?6", nativeQuery = true)
-    void updateCompanyPlan(String title, String category, String info, String recurring, String price, String trial);
+    @Query(value = "UPDATE company_plan SET title = ?1, category = ?2, info = ?3, recurring = ?4, price = ?5, trial = ?6 WHERE id = ?7", nativeQuery = true)
+    void updateCompanyPlan(String title, String category, String info, String recurring, String price, String trial, Long planID);
 
     @Modifying
     @Transactional
@@ -28,10 +28,9 @@ public interface CompanyPlanRepo extends JpaRepository<CompanyPlan, Long> {
     @Query(value = "UPDATE company_plan SET subscriptions = subscriptions + 1 WHERE id = ?1", nativeQuery = true)
     void updateCompanyPlanSubscription(Long planId);
 
-
     @Modifying
     @Transactional
-    @Query(value = "UPDATE company_plan  SET cancelation = cancelation + 1 WHERE id = ?1", nativeQuery = true)
+    @Query(value = "UPDATE company_plan SET cancelation = cancelation + 1 WHERE id = ?1", nativeQuery = true)
     void updateCompanyPlanCancelation(Long planId);
 
     @Modifying
@@ -41,8 +40,8 @@ public interface CompanyPlanRepo extends JpaRepository<CompanyPlan, Long> {
 
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO company_plan (title, category, info, recurring, price, trial, company_name) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)", nativeQuery = true)
-    void insertCompanyPlan(String title, String category, String info, String recurring, int price, boolean trial);
+    @Query(value = "INSERT INTO company_plan (title, category, description, recurring, price, trial, company_name) VALUES (?1, ?2, ?3, ?4, ?5, ?6)", nativeQuery = true)
+    void insertCompanyPlan(String title, String category, String description, String recurring, int price, boolean trial);
 
     Optional<List<CompanyPlan>> findAllByCompanyName(Company companyName);
 

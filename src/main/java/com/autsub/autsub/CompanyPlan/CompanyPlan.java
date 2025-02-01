@@ -53,6 +53,7 @@ public class CompanyPlan {
     @Column(name = "trial", nullable = true)
     private boolean trial;
 
+    // drived attributes 
     @Column(name = "subscriptions", nullable = true)
      private double subscriptions;
 
@@ -64,15 +65,17 @@ public class CompanyPlan {
 
     @Column(name = "stumble_reason", nullable = true)
     private String stumbleReason;
+    // 
 
     @Column(name = "last_offer_price", nullable = true)
     private double lastOfferPrice;
 
+    // drived attribute
     @Column(name = "last_offer_date",  nullable = true)
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date lastOfferDate;
-
-
+    
+    
     public void setLast_offer_date(String last_offer_date) {
         this.lastOfferDate = Date.from(Instant.parse(last_offer_date));
     }

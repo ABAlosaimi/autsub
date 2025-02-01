@@ -1,6 +1,7 @@
 package com.autsub.autsub.PlanStatistics.Dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,10 +21,9 @@ public class StaticPlansDto {
     
     private String[] recurring;
     
-    @NotBlank(message = "Price is mandatory")
+    @NotNull(message = "Price is mandatory")
     private int[] price;
 
     private boolean[] trial;
-
 
 }

@@ -18,5 +18,7 @@ public class PasswordRestRequest {
     @ValidatePassword
     @NotBlank(message = "Password is mandatory")
     @NonNull
-    private String password;
+    private String newPassword;
+
+    private String oldPassword;
 }

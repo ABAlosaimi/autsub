@@ -53,7 +53,7 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
     }
 
     @Override
-    public void updatePlanData(PlanRequestDto planRequestDto) throws IOException {
+    public void updatePlanData(PlanRequestDto planRequestDto, Long planID) throws IOException {
         String companyName = authrnticationCheck();
 
         Optional<Company> iscompanyActive = companyRepo.findByName(companyName);
@@ -78,7 +78,9 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
           newCompanyPlan.getDescription(),
            newCompanyPlan.getRecurring(),
             newCompanyPlan.getCategory(),
-             newCompanyPlan.getTitel());
+             newCompanyPlan.getTitel(),
+             planID
+             );
 
     }
 

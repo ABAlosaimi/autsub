@@ -107,15 +107,15 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService{
 
 
         int insertCounter = 0; 
-        int j;
+        int i = 0;
         while (
-            staticPlansDto.getTitel().length > insertCounter
+            (staticPlansDto.getTitel().length -1) > insertCounter
            ) {
       
             if (staticPlansDto.getTitel().length <= 200) {
                 int halfLen = staticPlansDto.getTitel().length/2;
 
-              for (j = 0; j<halfLen; j++){
+              for (int j = i; j<halfLen; j++){
 
               companyPlanRepo.insertCompanyPlan(planTitles[j],
                  planCategories[j],
@@ -123,16 +123,14 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService{
                  planRecurrings[j],
                  planPrices[j], 
                  planTrials[j]);
-                 
+                 i++;
                  insertCounter++;
-                //  if (j == halfLen -1 && j ) {
-                    
-                //  }
+                
             }
         }else{
             int lenDevidedBy10 = staticPlansDto.getTitel().length/10;
 
-            for (j = 0; j<lenDevidedBy10; j++){
+            for (int j = i; j<lenDevidedBy10; j++){
 
                 companyPlanRepo.insertCompanyPlan(planTitles[j],
                  planCategories[j],
@@ -140,7 +138,7 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService{
                  planRecurrings[j],
                  planPrices[j], 
                  planTrials[j]);
-    
+                i++;
                 insertCounter++;
                 }
            }

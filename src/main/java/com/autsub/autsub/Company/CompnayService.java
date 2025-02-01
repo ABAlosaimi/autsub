@@ -8,6 +8,7 @@ import com.autsub.autsub.Company.Dto.PasswordRestRequest;
 import com.autsub.autsub.Company.Dto.RigterRequestDto;
 import com.autsub.autsub.Company.Dto.RigterResponse;
 import com.autsub.autsub.Company.Dto.UpdateCompanyDataDto;
+import com.autsub.autsub.Company.Dto.UpdateIdentityOfCompnay;
 
 public interface CompnayService {
     RigterResponse registerCompany(RigterRequestDto rigterRequestDto) throws Exception;
@@ -15,5 +16,6 @@ public interface CompnayService {
     void emailAndaddressUpdate(UpdateCompanyDataDto updateCompanyDataDto) throws Exception;
     void updateCompnayPassword(PasswordRestRequest passwordRestRequest) throws IOException;
     void deleteCompany() throws IOException;
+    void updateCompanyidentifyDat(UpdateIdentityOfCompnay updateIdentityOfCompnay);
 
 }

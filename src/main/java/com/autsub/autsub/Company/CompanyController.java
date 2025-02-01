@@ -17,6 +17,7 @@ import com.autsub.autsub.Company.Dto.PasswordRestRequest;
 import com.autsub.autsub.Company.Dto.RigterRequestDto;
 import com.autsub.autsub.Company.Dto.RigterResponse;
 import com.autsub.autsub.Company.Dto.UpdateCompanyDataDto;
+import com.autsub.autsub.Company.Dto.UpdateIdentityOfCompnay;
 
 import jakarta.validation.Valid;
 
@@ -24,7 +25,7 @@ import jakarta.validation.Valid;
 @RequestMapping("/company")
 public class CompanyController {
 
-    CompnayService compnayService;
+    private final CompnayService compnayService;
 
     public CompanyController(CompnayService compnayService) {
         this.compnayService = compnayService;
@@ -62,6 +63,13 @@ public class CompanyController {
         compnayService.updateCompnayPassword(passwordRestRequest);
         
         return ResponseEntity.status(200).build();                        
+    }
+
+    @PutMapping("/update-I")
+    public ResponseEntity<Object> updateCompanyIdentityData(@Valid @RequestBody UpdateIdentityOfCompnay updateIdentityOfCompnay){
+        compnayService.updateCompanyidentifyDat(updateIdentityOfCompnay);
+
+        return ResponseEntity.ok().build();
     }
 
 

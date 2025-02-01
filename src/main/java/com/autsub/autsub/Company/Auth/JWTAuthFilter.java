@@ -39,13 +39,14 @@ import java.io.IOException;
 
            String requestPath = request.getRequestURI();
 
-           if (requestPath.startsWith("/company/auth")){
+           if (requestPath.startsWith("/company/auth") || requestPath.startsWith("/ai/search")){
                filterChain.doFilter(request,response);
                return;
            }
 
             final String authHeader = request.getHeader("Authorization");
 
+            System.out.println(authHeader);
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
                 throw new UnauthorizedException();
             }

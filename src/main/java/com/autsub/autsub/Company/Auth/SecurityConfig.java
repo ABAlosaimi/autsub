@@ -36,7 +36,7 @@ import java.util.List;
         http
                 .csrf(AbstractHttpConfigurer::disable) // for dev only
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/company/auth/**","/v3","/error")
+                        .requestMatchers("/company/auth/**","/v3","/error","/ai/search")
                         .permitAll() 
                         .anyRequest()
                         .authenticated()
@@ -55,13 +55,14 @@ import java.util.List;
         public CorsConfigurationSource corsConfigurationSource() {
             CorsConfiguration configuration = new CorsConfiguration();
 
-            configuration.setAllowedOrigins(List.of("http://localhost:8080","http://localhost:8080/company/auth/register","http://localhost:8080/company/auth/login"));
+            configuration.setAllowedOrigins(List.of("http://localhost:8080","http://localhost:8080/company/auth/register","http://localhost:8080/company/auth/login", "http://localhost:5173"));
             configuration.setAllowedMethods(List.of("GET","POST"));
             configuration.setAllowedHeaders(List.of("Authorization","Content-Type"));
 
             UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
             source.registerCorsConfiguration("/company/auth/**",configuration);
+            source.registerCorsConfiguration("/ai/search", configuration);
 
             return source;
         }

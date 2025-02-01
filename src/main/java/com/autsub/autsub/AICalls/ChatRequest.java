@@ -1,66 +1,62 @@
 package com.autsub.autsub.AICalls;
 
 
+import java.util.List;
+
+import com.autsub.autsub.CompanyPlan.CompanyPlan;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.Data;
+
+@Data
 public class ChatRequest {
-    
-    @JsonProperty("model")
+    @JsonProperty("model")  
     private String model;
-    private Message message;
-    
+
+    @JsonProperty("messages")  
+    private List<Message> messages;
+
     @JsonProperty("max_tokens")
     private int maxTokens;
 
-    public ChatRequest(String model, Message message, int maxTokens) {
+    public ChatRequest(String model, List<Message> messages, int maxTokens) {
         this.model = model;
-        this.message = message;
+        this.messages = messages;
         this.maxTokens = maxTokens;
     }
 
-    public ChatRequest(){}
-    
-        public static class Message {
-            private String role;
-            private String content;
-    
-            public Message(String role, String content) {
-                this.role = role;
-                this.content = content;
-            }
-    
-            public String getRole() { return role; }
-            public String getContent() { return content; }
+    public ChatRequest(String model, List<Message> messages){
+        this.model = model;
+        this.messages = messages;
+    }
 
+    public static class Message  {
+        @JsonProperty("role")
+        private String role;
 
-            public void setRole(String role) {this.role = role;}
+        @JsonProperty(defaultValue = "")
+        private String content;
 
-            public void setContent(String content) {this.content = content;}
-         }
+        private List<CompanyPlan> companyPlans;
 
-        public String getModel() {
-            return model;
+        public Message(String role, String content) {
+            this.role = role;
+            this.content = content;
         }
 
-        public Message getMessage() {
-            return message;
+        public Message(String role,List<CompanyPlan> companyPlans){
+            this.role = role;
+            this.companyPlans = companyPlans;
         }
 
-        public int getMaxTokens() {
-            return maxTokens;
+        public List<CompanyPlan> getCompanyPlans(){
+            return companyPlans;
         }
 
-        public void setModel(String model) {
-            this.model = model;
+        public void setContent(List<CompanyPlan> companyPlans){
+    //        this.content = List.
         }
 
-        public void setMessage(String message) {
-            this.message = new Message("user", message);
-        }
-
-        public void setMaxTokens(int maxTokens) {
-            this.maxTokens = maxTokens;
-        }
-   
+    } 
 }
     

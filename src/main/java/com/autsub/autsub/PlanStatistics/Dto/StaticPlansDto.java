@@ -1,16 +1,15 @@
 package com.autsub.autsub.PlanStatistics.Dto;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
+
 @NoArgsConstructor
-@Setter 
+@Data
 public class StaticPlansDto {
 
-     @NotBlank(message = "Titel is mandatory")
+    @NotBlank(message = "Titel is mandatory")
     private String[] titel;
     
     @NotBlank(message = "Category is mandatory")

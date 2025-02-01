@@ -1,6 +1,9 @@
 package com.autsub.autsub.AICalls;
 import java.util.List;
 
+import lombok.Data;
+
+@Data
 public class ChatResponse {
     
     private List<Choice> choices;
@@ -10,27 +13,16 @@ public class ChatResponse {
     }
 
     public static class Choice {
-        private int index;
         private Message message;
 
-       public int getIndex(){
-        return index;
-       }
-        public Message getMessage() { 
-            return message; 
-        }
+        public Message getMessage() { return message; }
     }
 
     public static class Message {
         private String role;
         private String content;
 
-        public String getRole(){
-            return role;
-        }
-        public String getContent() { 
-            return content; 
-        }
+        public String getContent() { return content; }
     }
 }
 

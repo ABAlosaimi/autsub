@@ -1,56 +1,32 @@
-# Company's Subscription Management API
+# AutSub - Subscription Management System
 
-A Spring Boot REST API for managing company subscriptions palns by providing a list of featuers that will eaable the company to tacke a faster decisions.
+## Overview
+AutSub is a subscription management system built with Spring Boot, designed to help businesses manage their subscription plans and analyze customer churn. The system provides secure API endpoints for company registration, authentication, plan management, and AI-powered analytics.
 
----
+## Features
+- Company account management
+- Subscription plan creation and management
+- AI-powered churn analysis
+- JWT-based authentication
+- Plan statistics and analytics
 
-## API Endpoints
+## Technology Stack
+- Java 21
+- Spring Boot 3.4.1
+- Spring Security
+- PostgreSQL
+- JWT for authentication
+- OpenAI GPT integration
+- Maven for build management
 
-### Company Registration
-- **Method**: `POST`
-- **Endpoint**: `/company/auth/register`
-- **Request Body** (JSON):
-  ```json
-  {
-    "name": "string",
-    "password": "string",
-    "email": "string",
-    "address": "string",
-    "industry": "string",
-    "commercial_Registration_Number": "string"
-  }
+## Running the Application
+1. Clone the repository
+2. Configure application.properties
+3. Run using Maven:
+```bash
+./mvnw spring-boot:run
+```
 
+## Contributing
+Please follow the existing code style and add appropriate tests for new features.
 
-### Response
-
-- **Status code**: `201`
-- **response body**:
-  ```json
-  { "accessToken": "ACCESS_TOKEN"}
-
----
-
-### Company login 
-- **Method**: `GET`
-- **Endpoint**: `/company/auth/login`
-- **Request Body** (JSON):
-   ```json
-   {
-    "email": "String",
-     "password": "String"
-   }
-### Response 
-- **Status code**: `200`
-- **response body**:
-  ```json
-  { "accessToken": "ACCESS_TOKEN"}
-
----
-
-
-
-  
-  
-
-
-  

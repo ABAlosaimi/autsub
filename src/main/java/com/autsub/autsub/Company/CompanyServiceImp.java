@@ -108,8 +108,8 @@ public class CompanyServiceImp implements CompnayService {
     }
 
 
-     @Override
-     public void updateCompnayPassword(PasswordRestRequest passwordRestRequest) throws IOException{
+     @Override // typo in the param PasswordRestRequest -> PasswordResetRequest
+     public void updateCompnayPassword(PasswordRestRequest passwordRestRequest) throws IOException{ // need to be updated in terms of the auth, how someone forgot their pass and provide auth data ? 
        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
        Optional<Company> isCompanyExists = companyRepo.findByName(authentication.getName());
 
@@ -130,11 +130,10 @@ public class CompanyServiceImp implements CompnayService {
 
      }
 
-     @Override
+     @Override // typo updateCompanyidentifyDat -> updateCompanyidentityData
      public void updateCompanyidentifyDat(UpdateIdentityOfCompnay updateIdentityOfCompnay){
         companyRepo.updateCompanyidentifyDat(updateIdentityOfCompnay.getName(), updateIdentityOfCompnay.getIndustry(), updateIdentityOfCompnay.getCommercial_Registration_Number());
      }
-
 
 
      public void deleteCompany() throws IOException {
@@ -145,7 +144,9 @@ public class CompanyServiceImp implements CompnayService {
             throw new BadRequestException("the account you are trying to delete is not found");
         }
 
-        companyRepo.delete(isCompanyExists.get());
+        Company company = isCompanyExists.get();
+        
+        companyRepo.delete(company);
      }
       
 }

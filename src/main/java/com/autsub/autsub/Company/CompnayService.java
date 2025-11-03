@@ -17,5 +17,4 @@ public interface CompnayService {
     void updateCompnayPassword(PasswordRestRequest passwordRestRequest) throws IOException;
     void deleteCompany() throws IOException;
     void updateCompanyidentifyDat(UpdateIdentityOfCompnay updateIdentityOfCompnay);
-
 }

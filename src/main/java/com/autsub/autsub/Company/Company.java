@@ -55,16 +55,16 @@ public class Company implements UserDetails{
      private String email;
 
     @NotBlank(message = "Password is mandatory")
-    @Column(columnDefinition = "VARCHAR(255) NOT NULL")
+    @Column(name = "password", nullable = false, updatable = true)
      private String password;
 
     @NotBlank(message = "Address is mandatory")
-    @Column(name = "address", nullable = false)
+    @Column(name = "address", nullable = false, updatable = true)
      private String address;
 
-     @NotBlank(message = "Industry is mandatory")
-     @Column(columnDefinition = "VARCHAR(255) NOT NULL CHECK (industry IN ('Finance', 'Healthcare', 'Retail', 'Manufacturing', 'Education'))")
-     private String industry;
+    @NotBlank(message = "Industry is mandatory")
+    @Column(columnDefinition = "VARCHAR(255) NOT NULL CHECK (industry IN ('Finance', 'Healthcare', 'Retail', 'Manufacturing', 'Education'))")
+     private String industry; // could be updated to validate aginst all saudi sectors 
 
      @NotBlank(message = "Commercial Registration Number is mandatory")
      @Column(columnDefinition = "VARCHAR(10) NOT NULL CHECK (LENGTH(Commercial_Registration_Number) = 10)")
@@ -73,7 +73,7 @@ public class Company implements UserDetails{
      @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
      private boolean active;
 
-
+     
      public Boolean getActive() {
          return active;
      }

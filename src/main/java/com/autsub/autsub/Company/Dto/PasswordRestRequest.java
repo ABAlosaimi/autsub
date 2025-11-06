@@ -20,5 +20,7 @@ public class PasswordRestRequest {
     @NonNull
     private String newPassword;
 
+    @NotBlank(message = "Password is mandatory")
+    @NonNull
     private String oldPassword;
 }

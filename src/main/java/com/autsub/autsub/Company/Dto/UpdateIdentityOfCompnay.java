@@ -14,11 +14,11 @@ public class UpdateIdentityOfCompnay {
     private String name; 
     
     @NotBlank(message = "The industry should be addressed")
-    @Pattern(regexp = "Finance|Healthcare|Retail|Manufacturing|Education", message = "the new industry should be in the set of the cuntry's sectors")
+    @Pattern(regexp = "Finance| Healthcare |Retail | Manufacturing | Education", message = "the new industry should be in the set of the cuntry's sectors")
     private String industry;
 
     @NotBlank(message = "the commercial number should be provided")
-    @Size(min = 10,max = 10, message = "the commercial number isn't complete")
+    @Size(min = 10,max = 10, message = "the commercial number uncompleted")
     private String commercial_Registration_Number;
     
 }

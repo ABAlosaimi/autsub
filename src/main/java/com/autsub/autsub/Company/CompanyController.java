@@ -1,7 +1,6 @@
 package com.autsub.autsub.Company;
 
 import java.io.IOException;
-
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,14 +10,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.autsub.autsub.Company.Dto.LoginRequestDto;
+import com.autsub.autsub.Company.Dto.UpdateIdentityOfCompnay;
 import com.autsub.autsub.Company.Dto.PasswordRestRequest;
 import com.autsub.autsub.Company.Dto.RigterRequestDto;
 import com.autsub.autsub.Company.Dto.RigterResponse;
 import com.autsub.autsub.Company.Dto.UpdateCompanyDataDto;
-import com.autsub.autsub.Company.Dto.UpdateIdentityOfCompnay;
-
 import jakarta.validation.Valid;
 
 @RestController
@@ -69,14 +66,14 @@ public class CompanyController {
     public ResponseEntity<Object> updateCompanyIdentityData(@Valid @RequestBody UpdateIdentityOfCompnay updateIdentityOfCompnay){
         compnayService.updateCompanyidentifyDat(updateIdentityOfCompnay);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(200).build();
     }
 
 
     @DeleteMapping("/delete")
     public ResponseEntity<Object> deleteCompany() throws IOException {
         compnayService.deleteCompany();
-        return ResponseEntity.status(200).build();
+        return ResponseEntity.status(204).build();
     }
    
  }

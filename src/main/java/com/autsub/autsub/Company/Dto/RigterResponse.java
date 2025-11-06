@@ -8,7 +8,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
-public class RigterResponse {
+public class RigterResponse { 
 
   public RigterResponse(String accessToken) {
         this.accessToken = accessToken;

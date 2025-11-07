@@ -5,23 +5,20 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import com.autsub.autsub.Company.Company;
 
-@Repository
 public interface CompanyPlanRepo extends JpaRepository<CompanyPlan, Long> {
-    Optional<CompanyPlan> findByCompanyName(Company company);
+    Optional<CompanyPlan> findByCompanyName(String name);
      
     @Modifying
     @Transactional
-    @Query(value = "UPDATE company_plan SET title = ?1, category = ?2, info = ?3, recurring = ?4, price = ?5, trial = ?6 WHERE id = ?7", nativeQuery = true)
-    void updateCompanyPlan(String title, String category, String info, String recurring, String price, String trial, Long planID);
+    @Query(value = "UPDATE company_plan SET title = ?1, category = ?2, description = ?3, recurring = ?4, price = ?5, trial = ?6 WHERE id = ?7", nativeQuery = true)
+    void updateCompanyPlan(String title, String category, String description, String recurring, float price, boolean trial, Long planID);
 
     @Modifying
     @Transactional
     @Query(value = "UPDATE company_plan SET last_offer_price = ?2, last_offer_date = NOW() WHERE id = ?1", nativeQuery = true)
-    void updateCompanyPlanLastOffer(Long id, int offerPrice);
+    void updateCompanyPlanLastOffer(Long planId, float offerPrice);
 
     @Modifying
     @Transactional
@@ -41,8 +38,8 @@ public interface CompanyPlanRepo extends JpaRepository<CompanyPlan, Long> {
     @Modifying
     @Transactional
     @Query(value = "INSERT INTO company_plan (title, category, description, recurring, price, trial, company_name) VALUES (?1, ?2, ?3, ?4, ?5, ?6)", nativeQuery = true)
-    void insertCompanyPlan(String title, String category, String description, String recurring, int price, boolean trial);
+    void insertCompanyPlan(String title, String category, String description, String recurring, float price, boolean trial);
 
-    Optional<List<CompanyPlan>> findAllByCompanyName(Company companyName);
+    Optional<List<CompanyPlan>> findAllByCompanyName(String companyName);
 
 }

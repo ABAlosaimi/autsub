@@ -2,10 +2,8 @@ package com.autsub.autsub.CompanyPlan;
 
 import java.time.Instant;
 import java.util.Date;
-
 import com.autsub.autsub.Company.Company;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,7 +27,7 @@ public class CompanyPlan {
     private Long id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "company_name", referencedColumnName = "name", nullable = false, updatable = true)
+    @JoinColumn(name = "company_name", referencedColumnName = "name", nullable = false, updatable = false)
     private Company companyName;
       
     @Column(name = "titel", nullable = false)
@@ -44,13 +42,13 @@ public class CompanyPlan {
     @NotBlank(message = "Description is mandatory")
     private String description;
     
-    @Column(columnDefinition = "VARCHAR(9) NOT NULL CHECK (recurring IN ('Monthly', 'Yearly', 'Weekly'))", nullable = true)
+    @Column(columnDefinition = "VARCHAR(9) NOT NULL CHECK (recurring IN ('Monthly', 'Yearly', 'Weekly'))", nullable = false, updatable = true)
     private String recurring;
     
-    @Column(name = "price", nullable = false)
-    private int price;
+    @Column(name = "price", nullable = false, updatable = true)
+    private float price;
     
-    @Column(name = "trial", nullable = true)
+    @Column(name = "trial", nullable = true, updatable = true)
     private boolean trial;
 
     // drived attributes 
@@ -65,16 +63,14 @@ public class CompanyPlan {
 
     @Column(name = "stumble_reason", nullable = true)
     private String stumbleReason;
-    // 
-
+    
     @Column(name = "last_offer_price", nullable = true)
-    private double lastOfferPrice;
+    private float lastOfferPrice;
 
     // drived attribute
     @Column(name = "last_offer_date",  nullable = true)
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date lastOfferDate;
-    
     
     public void setLast_offer_date(String last_offer_date) {
         this.lastOfferDate = Date.from(Instant.parse(last_offer_date));
@@ -83,7 +79,7 @@ public class CompanyPlan {
     public CompanyPlan() {
     }
 
-    public CompanyPlan(String titel, String category, String description, String recurring, int price, boolean trial, Company company_name) {
+    public CompanyPlan(String titel, String category, String description, String recurring, float price, boolean trial, Company company_name) {
         this.companyName = company_name;
         this.titel = titel;
         this.category = category;
@@ -91,6 +87,10 @@ public class CompanyPlan {
         this.recurring = recurring;
         this.price = price;
         this.trial = trial;
+    }
+
+    public boolean getTrial() {
+        return this.trial;
     }
 
   }

@@ -17,10 +17,11 @@ public class PlanRequestDto {
     @NotBlank(message = "Description is mandatory")
     private String description;
     
+    @NotBlank(message = "Recurring is mandatory")
     private String recurring;
     
-    @NotNull(message = "the price shoould not be null")
-    private int price;
+    @NotNull(message = "the price should not be null")
+    private float price;
 
     private boolean trial;
 
@@ -80,7 +81,7 @@ public class PlanRequestDto {
     }
 
 
-    public int getPrice() {
+    public float getPrice() {
         return price;
     }
  

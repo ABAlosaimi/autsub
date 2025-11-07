@@ -3,7 +3,7 @@ package com.autsub.autsub.CompanyPlan.Dto;
 import lombok.Data;
 import lombok.NonNull;
 
-@Data
+@Data // should be updated to return the data of the plan 
 public class PlanResponseDto {
     
     @NonNull

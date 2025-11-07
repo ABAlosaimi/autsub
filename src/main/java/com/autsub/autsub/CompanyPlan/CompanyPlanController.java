@@ -1,7 +1,5 @@
 package com.autsub.autsub.CompanyPlan;
 
-import java.io.IOException;
-
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -9,10 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.autsub.autsub.CompanyPlan.Dto.PlanRequestDto;
 import com.autsub.autsub.CompanyPlan.Dto.PlanResponseDto;
-
 import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.validation.Valid;
 
@@ -28,7 +24,7 @@ public class CompanyPlanController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Object> createCompanyPlan(@Valid @RequestBody PlanRequestDto planRequestDto) throws IOException {
+    public ResponseEntity<Object> createCompanyPlan(@Valid @RequestBody PlanRequestDto planRequestDto) throws Exception {
         PlanResponseDto response = companyPlanService.createCompanyPlan(planRequestDto);
 
          return ResponseEntity.status(201)
@@ -38,7 +34,7 @@ public class CompanyPlanController {
 
 
     @PutMapping("/update")
-    public ResponseEntity<Object> updatePlanData(@Valid @RequestBody PlanRequestDto planRequestDto, @RequestBody Long planID) throws IOException {
+    public ResponseEntity<Object> updatePlanData(@Valid @RequestBody PlanRequestDto planRequestDto, @RequestBody Long planID) throws Exception {
         companyPlanService.updatePlanData(planRequestDto, planID);
 
         return ResponseEntity.status(200).build();

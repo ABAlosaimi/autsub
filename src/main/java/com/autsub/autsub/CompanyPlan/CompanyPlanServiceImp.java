@@ -3,11 +3,9 @@ package com.autsub.autsub.CompanyPlan;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
 import com.autsub.autsub.Company.Company;
 import com.autsub.autsub.Company.CompanyRepo;
 import com.autsub.autsub.CompanyPlan.Dto.PlanRequestDto;
@@ -27,7 +25,7 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
     }
 
     @Override
-    public PlanResponseDto createCompanyPlan(PlanRequestDto planRequestDto) throws IOException{
+    public PlanResponseDto createCompanyPlan(PlanRequestDto planRequestDto) throws IOException {
        String companyName = authrnticationCheck();
 
         Optional<Company> iscompanyActive = companyRepo.findByName(companyName);
@@ -46,10 +44,9 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
             iscompanyActive.get()
         );
 
-        CompanyPlan newCompanyPlan = companyPlanRepo.save(companyPlan);
+        companyPlanRepo.save(companyPlan);
 
-        return new PlanResponseDto(newCompanyPlan.getId());
-
+        return new PlanResponseDto(companyPlan.getId());
     }
 
     @Override
@@ -64,7 +61,7 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
 
         Company company = iscompanyActive.get();
 
-        Optional<CompanyPlan> companyPlan = companyPlanRepo.findByCompanyName(company);
+        Optional<CompanyPlan> companyPlan = companyPlanRepo.findByCompanyName(company.getName());
 
         if (!companyPlan.isPresent()) {
             throw new BadRequestException("Company plan not found");
@@ -73,23 +70,22 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
         CompanyPlan newCompanyPlan = companyPlan.get();
 
         companyPlanRepo.updateCompanyPlan(  
-        newCompanyPlan.getTitel(),
-         newCompanyPlan.getCategory(),
-          newCompanyPlan.getDescription(),
-           newCompanyPlan.getRecurring(),
-            newCompanyPlan.getCategory(),
-             newCompanyPlan.getTitel(),
-             planID
+                newCompanyPlan.getTitel(),
+                newCompanyPlan.getCategory(),
+                newCompanyPlan.getDescription(),
+                newCompanyPlan.getRecurring(),
+                newCompanyPlan.getPrice(),
+                newCompanyPlan.getTrial(),
+                planID
              );
-
     }
 
 
     @Override
-    public void providOffer(Long planId, int offerPrice) throws IOException{
+    public void providOffer(Long planId, float offerPrice) throws IOException{
        authrnticationCheck();
 
-       Optional<CompanyPlan> isPlanExists = companyPlanRepo.findById(planId);
+         Optional<CompanyPlan> isPlanExists = companyPlanRepo.findById(planId);
 
          if(isPlanExists.isEmpty()){
               throw new BadRequestException("plan not found");
@@ -120,7 +116,7 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
           throw new NotActiveAccountException();
         }
 
-     Optional<List<CompanyPlan>> companyPlans = companyPlanRepo.findAllByCompanyName(isCompanyActive.get());
+     Optional<List<CompanyPlan>> companyPlans = companyPlanRepo.findAllByCompanyName(isCompanyActive.get().getName());
 
         if(!companyPlans.isPresent()){
             throw new BadRequestException("the plan is not exists");
@@ -139,6 +135,5 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
    
         return authentication.getCredentials().toString();
     }
-
 
  }

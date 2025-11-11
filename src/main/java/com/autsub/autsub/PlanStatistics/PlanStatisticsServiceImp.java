@@ -16,7 +16,7 @@ import com.autsub.autsub.PlanStatistics.Dto.PlansStatisticsResposeDto;
 import com.autsub.autsub.PlanStatistics.Dto.StaticPlansDto;
 
 @Service
-public class PlanStatisticsServiceImp implements PlanStatisticsService{
+public class PlanStatisticsServiceImp implements PlanStatisticsService {
 
     private final CompanyPlanRepo companyPlanRepo;
     private final CompanyRepo companyRepo;
@@ -36,14 +36,16 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService{
             throw new BadRequestException("Company is not active or not found");
         }
 
-        Optional<CompanyPlan> companyPlan = companyPlanRepo.findById(planId);
+        if (planId != null){
+             Optional<CompanyPlan> companyPlan = companyPlanRepo.findById(planId);
 
-        if (!companyPlan.isPresent()) {
-            throw new BadRequestException("Plan not found");
+          
+            if (!companyPlan.isPresent()) {
+                throw new BadRequestException("Plan not found");
+            }
         }
 
-        companyPlanRepo.updateCompanyPlanSubscription(planId);
-        
+        companyPlanRepo.updateCompanyPlanSubscription(planId);  
     }
 
 
@@ -57,19 +59,20 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService{
             throw new BadRequestException("the company account is no more active or not found");
         }
 
-        Optional<CompanyPlan> isCompayPlanExists = companyPlanRepo.findById(planId);
+        if (planId != null){
+            Optional<CompanyPlan> isCompayPlanExists = companyPlanRepo.findById(planId);
 
-        if (!isCompayPlanExists.isPresent()) {
-            throw new BadRequestException("the Plan deleted or the id is not correct");
+            if (!isCompayPlanExists.isPresent()) {
+                throw new BadRequestException("the Plan deleted or the id is not correct");
+            }
         }
 
         companyPlanRepo.updateCompanyPlanCancelation(planId);
-
     }
 
 
     @Override
-    public void stumbledPlan(Long planId, String stumbleReason) throws IOException{
+    public void stumbledPlan(Long planId, String stumbleReason) throws IOException {
         String companyName = authrnticationCheck();
         
         Optional<Company> isCompanyActive = companyRepo.findByName(companyName);
@@ -77,11 +80,13 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService{
         if(!isCompanyActive.isPresent() || isCompanyActive.get().getActive() == false){
             throw new BadRequestException("the company account is no more active or not found");
         }
+        
+        if (planId != null){
+            Optional<CompanyPlan> isCompayPlanExists = companyPlanRepo.findById(planId);
 
-        Optional<CompanyPlan> isCompayPlanExists = companyPlanRepo.findById(planId);
-
-        if (!isCompayPlanExists.isPresent()) {
-            throw new BadRequestException("the Plan deleted or the id is not correct");
+            if (!isCompayPlanExists.isPresent()) {
+                throw new BadRequestException("the Plan deleted or the id is not correct");
+            }
         }
 
         companyPlanRepo.updateCompanyPlanStumbledSubscription(planId,stumbleReason);
@@ -158,7 +163,7 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService{
           throw new NotActiveAccountException();
         }
 
-     Optional<List<CompanyPlan>> companyPlans = companyPlanRepo.findAllByCompanyName(isCompanyActive.get());
+     Optional<List<CompanyPlan>> companyPlans = companyPlanRepo.findAllByCompanyName(isCompanyActive.get().getName());
 
         if(!companyPlans.isPresent()){
             throw new BadRequestException("the plan is not exists");
@@ -178,7 +183,7 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService{
              throw new NotActiveAccountException();
            }
 
-          Optional<List<CompanyPlan>> companyPlans = companyPlanRepo.findAllByCompanyName(isCompanyActive.get());
+          Optional<List<CompanyPlan>> companyPlans = companyPlanRepo.findAllByCompanyName(isCompanyActive.get().getName());
 
           if (!companyPlans.isPresent()) {
             throw new BadRequestException("theres no plans"); 

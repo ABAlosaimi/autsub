@@ -1,7 +1,6 @@
 package com.autsub.autsub.PlanStatistics.Dto;
 
 import java.util.List;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

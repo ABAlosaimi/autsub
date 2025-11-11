@@ -14,4 +14,4 @@ public interface PlanStatisticsService {
    List<CompanyPlan> getcompanyPlans() throws Exception;
    PlansStatisticsResposeDto getPlansStatistics() throws Exception;
    CompanyPlan getCompanyPlan(Long planId) throws Exception;
-} 
+}

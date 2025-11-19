@@ -5,10 +5,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @NoArgsConstructor
 @Data
-public class StaticPlansDto {
+public class StaticPlansDto { // it may be refactored to a map of <String, Map<String,String>> later 
 
     @NotBlank(message = "Titel is mandatory")
     private String[] titel;

@@ -133,7 +133,7 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
             throw new BadRequestException("you are not authorized to do the action");
         }
    
-        return authentication.getCredentials().toString();
+        return authentication.getPrincipal().toString();
     }
 
  }

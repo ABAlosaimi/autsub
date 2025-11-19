@@ -9,7 +9,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import com.autsub.autsub.AICalls.ChatGPTService;
 import com.autsub.autsub.Company.Auth.JWTService;
 import com.autsub.autsub.Company.Dto.LoginRequestDto;

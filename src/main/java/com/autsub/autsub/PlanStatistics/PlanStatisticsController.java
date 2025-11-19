@@ -1,7 +1,6 @@
 package com.autsub.autsub.PlanStatistics;
 
 import java.util.List;
-
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,12 +8,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.autsub.autsub.CompanyPlan.CompanyPlan;
 import com.autsub.autsub.PlanStatistics.Dto.PlansStatisticsResposeDto;
 import com.autsub.autsub.PlanStatistics.Dto.StaticPlansDto;
 import com.autsub.autsub.PlanStatistics.Dto.SubReq;
-
 import jakarta.validation.constraints.NotNull;
 
 @RestController
@@ -26,7 +23,6 @@ public class PlanStatisticsController {
     PlanStatisticsController(PlanStatisticsService planStatisticsService){
         this.planStatisticsService = planStatisticsService;
     }
-
 
     @PutMapping("/gather-new")
     public ResponseEntity<Object> newSubscription(@NotNull @RequestBody SubReq subreq) throws Exception{
@@ -73,7 +69,6 @@ public class PlanStatisticsController {
 
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(respose);
     }
-
 
     @GetMapping("/plan")
     public ResponseEntity<CompanyPlan> getCompanyPlan(@NotNull @RequestBody Long planId) throws Exception{

@@ -113,12 +113,9 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService {
 
         int insertCounter = 0; 
         int i = 0;
-        while (
-            (staticPlansDto.getTitel().length -1) > insertCounter
-           ) {
-      
+        while (staticPlansDto.getTitel().length - 1 > insertCounter) {
             if (staticPlansDto.getTitel().length <= 200) {
-                int halfLen = staticPlansDto.getTitel().length/2;
+              int halfLen = staticPlansDto.getTitel().length / 2;
 
               for (int j = i; j<halfLen; j++){
 
@@ -131,26 +128,26 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService {
                  i++;
                  insertCounter++;
                 
-            }
-        }else{
-            int lenDevidedBy10 = staticPlansDto.getTitel().length/10;
-
-            for (int j = i; j<lenDevidedBy10; j++){
-
-                companyPlanRepo.insertCompanyPlan(planTitles[j],
-                 planCategories[j],
-                 planDescriptions[j],
-                 planRecurrings[j],
-                 planPrices[j], 
-                 planTrials[j]);
-                i++;
-                insertCounter++;
                 }
-           }
+            } else {
+                int lenDevidedBy10 = staticPlansDto.getTitel().length / 10;
 
-       }
+                for (int j = i; j<lenDevidedBy10; j++){
 
-    }
+                     companyPlanRepo.insertCompanyPlan(planTitles[j],
+                         planCategories[j],
+                         planDescriptions[j],
+                         planRecurrings[j],
+                         planPrices[j], 
+                         planTrials[j]);
+                        i++;
+                        insertCounter++;
+                    }
+                }
+
+            }
+
+        }
 
 
     @Override
@@ -166,7 +163,7 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService {
      Optional<List<CompanyPlan>> companyPlans = companyPlanRepo.findAllByCompanyName(isCompanyActive.get().getName());
 
         if(!companyPlans.isPresent()){
-            throw new BadRequestException("the plan is not exists");
+            throw new BadRequestException("there is no plans for this company currently");
          }
 
        return companyPlans.get(); 
@@ -186,7 +183,7 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService {
           Optional<List<CompanyPlan>> companyPlans = companyPlanRepo.findAllByCompanyName(isCompanyActive.get().getName());
 
           if (!companyPlans.isPresent()) {
-            throw new BadRequestException("theres no plans"); 
+            throw new BadRequestException("there is no plans for this company currently"); 
           }
 
           List<CompanyPlan> certnCompanyPlans = companyPlans.get();
@@ -215,9 +212,12 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService {
              throw new NotActiveAccountException();
            }
 
-        return companyPlanRepo.findById(planId).orElse(null);
+        if (planId != null) {
+             return companyPlanRepo.findById(planId).orElse(null);
+        }else{
+            throw new BadRequestException("plan id cannot be null");
+        }
     }
-
 
     private String authrnticationCheck() throws IOException{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -226,7 +226,7 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService {
             throw new BadRequestException("you are not authorized to do the action");
         }
    
-        return authentication.getCredentials().toString();
+        return authentication.getPrincipal().toString();
     }
 
     

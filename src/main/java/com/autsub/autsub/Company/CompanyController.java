@@ -1,7 +1,6 @@
 package com.autsub.autsub.Company;
 
 import java.io.IOException;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +32,6 @@ public class CompanyController {
         RigterResponse response = compnayService.registerCompany(rigterRequestDto);
         
         return ResponseEntity.status(201)
-                             .contentType(MediaType.APPLICATION_JSON)
                              .body(response);
     }   
 
@@ -43,7 +41,6 @@ public class CompanyController {
         compnayService.Companylogin(loginRequestDto);
         
         return ResponseEntity.status(200)
-                             .contentType(MediaType.APPLICATION_JSON)
                              .body(compnayService.Companylogin(loginRequestDto));
     }
 

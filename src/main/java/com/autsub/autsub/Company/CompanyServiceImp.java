@@ -1,7 +1,6 @@
 package com.autsub.autsub.Company;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 import org.apache.coyote.BadRequestException;
 import org.springframework.security.core.Authentication;
@@ -9,7 +8,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.autsub.autsub.AICalls.ChatGPTService;
 import com.autsub.autsub.Company.Auth.JWTService;
 import com.autsub.autsub.Company.Dto.LoginRequestDto;
 import com.autsub.autsub.Company.Dto.LoginResponseDto;
@@ -18,8 +16,6 @@ import com.autsub.autsub.Company.Dto.RigterRequestDto;
 import com.autsub.autsub.Company.Dto.RigterResponse;
 import com.autsub.autsub.Company.Dto.UpdateCompanyDataDto;
 import com.autsub.autsub.Company.Dto.UpdateIdentityOfCompnay;
-import com.autsub.autsub.CompanyPlan.CompanyPlan;
-import com.autsub.autsub.CompanyPlan.CompanyPlanRepo;
 
 @Service
 public class CompanyServiceImp implements CompnayService {
@@ -27,19 +23,13 @@ public class CompanyServiceImp implements CompnayService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final CompanyRepo companyRepo;
     private final JWTService jwtService;
-    private final CompanyPlanRepo companyPlanRepo;
-    private final ChatGPTService chatGPTService;
+    
 
      CompanyServiceImp(
       BCryptPasswordEncoder passwordEncoder, 
       CompanyRepo companyRepo,
       JWTService jwtService, 
-      UserDetailsService userDetailsService, 
-      CompanyPlanRepo companyPlanRepo, 
-      ChatGPTService chatGPTService) {
-
-        this.chatGPTService = chatGPTService;
-        this.companyPlanRepo = companyPlanRepo;
+      UserDetailsService userDetailsService) {
         this.passwordEncoder = passwordEncoder;
         this.companyRepo = companyRepo;
         this.jwtService = jwtService;
@@ -65,11 +55,19 @@ public class CompanyServiceImp implements CompnayService {
         rigterRequestDto.getCommercial_Registration_Number()
           );
 
-          companyRepo.save(newCompnay);
+        companyRepo.save(newCompnay);
 
         String accessToken = jwtService.generateToken(newCompnay); 
 
-        return new RigterResponse(accessToken);
+        RigterResponse response = new RigterResponse(newCompnay.getName(),
+                                                      newCompnay.getEmail(),
+                                                      newCompnay.getAddress(),
+                                                      newCompnay.getIndustry(), 
+                                                      newCompnay.getCommercial_Registration_Number(), 
+                                                      newCompnay.getActive(), 
+                                                      accessToken);
+
+        return response;
     }
    
 
@@ -89,15 +87,14 @@ public class CompanyServiceImp implements CompnayService {
 
         String accessToken = jwtService.generateToken(company);
 
-        // Optional<List<CompanyPlan>> isCompanyPlansExsits = companyPlanRepo.findAllByCompanyName(company);
-
-        // if (isCompanyPlansExsits.isEmpty()) {
-        //     return new LoginResponseDto(accessToken);
-        // }else if (company.getActive() != false){
-        //  chatGPTService.sendPlanDataToChatGPT(isCompanyPlansExsits.get());
-        // }
-
-        return new LoginResponseDto(accessToken);
+        LoginResponseDto responseDto = new LoginResponseDto(company.getName(), 
+                                                                company.getEmail(),
+                                                                company.getAddress(),
+                                                                company.getIndustry(),
+                                                                company.getCommercial_Registration_Number(),
+                                                                company.getActive(), accessToken);
+        
+        return responseDto;
     }
 
 
@@ -145,7 +142,10 @@ public class CompanyServiceImp implements CompnayService {
 
         Company company = isCompanyExists.get();
         
-        companyRepo.delete(company);
+        if (company != null){
+            companyRepo.delete(company);
+        }
+        
      }
       
 }

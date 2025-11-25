@@ -1,7 +1,6 @@
 package com.autsub.autsub.PlanStatistics;
 
 import java.util.List;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -59,7 +58,6 @@ public class PlanStatisticsController {
         List<CompanyPlan> response = planStatisticsService.getcompanyPlans();
 
         return ResponseEntity.ok()
-        .contentType(MediaType.APPLICATION_JSON)
         .body(response);
     }
 
@@ -67,14 +65,14 @@ public class PlanStatisticsController {
     public ResponseEntity<PlansStatisticsResposeDto> getPlansStatistics() throws Exception{
        PlansStatisticsResposeDto respose = planStatisticsService.getPlansStatistics();
 
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(respose);
+        return ResponseEntity.ok().body(respose);
     }
 
     @GetMapping("/plan")
     public ResponseEntity<CompanyPlan> getCompanyPlan(@NotNull @RequestBody Long planId) throws Exception{
         CompanyPlan response = planStatisticsService.getCompanyPlan(planId);
 
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(response);
+        return ResponseEntity.ok().body(response);
     }
     
 }

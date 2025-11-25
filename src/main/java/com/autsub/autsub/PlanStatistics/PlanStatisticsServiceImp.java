@@ -1,7 +1,9 @@
 package com.autsub.autsub.PlanStatistics;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.apache.coyote.BadRequestException;
 import org.springframework.security.core.Authentication;
@@ -28,7 +30,7 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService {
 
     @Override
     public void newSubscription(Long planId) throws IOException{
-         String companyName = authrnticationCheck();
+         String companyName = extractPrincipal();
 
          Optional<Company> isCompanyActive = companyRepo.findByName(companyName);
 
@@ -51,7 +53,7 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService {
 
     @Override
     public void cancelationOfsubscription(Long planId) throws IOException{
-         String companyName = authrnticationCheck();
+         String companyName = extractPrincipal();
 
         Optional<Company> isCompanyActive = companyRepo.findByName(companyName);
 
@@ -73,7 +75,7 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService {
 
     @Override
     public void stumbledPlan(Long planId, String stumbleReason) throws IOException {
-        String companyName = authrnticationCheck();
+        String companyName = extractPrincipal();
         
         Optional<Company> isCompanyActive = companyRepo.findByName(companyName);
 
@@ -95,7 +97,7 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService {
      
     @Override
     public void insertStaticCompanyPlan(StaticPlansDto staticPlansDto) throws IOException{
-         String companyName = authrnticationCheck();
+         String companyName = extractPrincipal();
 
          Optional<Company> isCompanyActive = companyRepo.findByName(companyName);
 
@@ -103,56 +105,39 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService {
             throw new BadRequestException("the company account is no more active or not found");
         }
 
-        String[] planTitles = staticPlansDto.getTitel();
-        String[] planCategories = staticPlansDto.getCategory();
-        String[] planDescriptions = staticPlansDto.getDescription();
-        String[] planRecurrings = staticPlansDto.getRecurring();
-        int[] planPrices = staticPlansDto.getPrice();
-        boolean[] planTrials = staticPlansDto.getTrial();
-
-
-        int insertCounter = 0; 
-        int i = 0;
-        while (staticPlansDto.getTitel().length - 1 > insertCounter) {
-            if (staticPlansDto.getTitel().length <= 200) {
-              int halfLen = staticPlansDto.getTitel().length / 2;
-
-              for (int j = i; j<halfLen; j++){
-
-              companyPlanRepo.insertCompanyPlan(planTitles[j],
-                 planCategories[j],
-                 planDescriptions[j],
-                 planRecurrings[j],
-                 planPrices[j], 
-                 planTrials[j]);
-                 i++;
-                 insertCounter++;
-                
-                }
-            } else {
-                int lenDevidedBy10 = staticPlansDto.getTitel().length / 10;
-
-                for (int j = i; j<lenDevidedBy10; j++){
-
-                     companyPlanRepo.insertCompanyPlan(planTitles[j],
-                         planCategories[j],
-                         planDescriptions[j],
-                         planRecurrings[j],
-                         planPrices[j], 
-                         planTrials[j]);
-                        i++;
-                        insertCounter++;
-                    }
-                }
-
-            }
-
+        Company company = isCompanyActive.get();
+ 
+        if (staticPlansDto.getPlans().size() > 1000) {
+             throw new BadRequestException("Cannot insert more than 1000 plans at once");
         }
 
+         // Convert to entities
+         List<CompanyPlan> plansToSave = new ArrayList<>();
+
+        for (Map.Entry<String, Map<String, String>> entry : staticPlansDto.getPlans().entrySet()) {
+          String title = entry.getKey();
+          Map<String, String> details = entry.getValue();
+
+          CompanyPlan plan = new CompanyPlan(
+              title,
+              details.get("category"),
+              details.get("description"),
+              details.get("recurring"),
+              Float.parseFloat(details.get("price")),
+              Boolean.parseBoolean(details.getOrDefault("trial", "false")),
+              company
+                );
+
+             plansToSave.add(plan);
+            }
+
+      // Batch insert - Spring Data JPA handles batching based on configuration
+      companyPlanRepo.saveAll(plansToSave);
+    }
 
     @Override
     public List<CompanyPlan> getcompanyPlans() throws IOException{
-     String companyName = authrnticationCheck();
+     String companyName = extractPrincipal();
 
      Optional<Company> isCompanyActive = companyRepo.findByName(companyName);
 
@@ -172,7 +157,7 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService {
 
     @Override
     public PlansStatisticsResposeDto getPlansStatistics() throws IOException {
-       String companyName = authrnticationCheck();
+       String companyName = extractPrincipal();
        
         Optional<Company> isCompanyActive = companyRepo.findByName(companyName);
    
@@ -204,7 +189,7 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService {
 
     @Override
     public CompanyPlan getCompanyPlan(Long planId) throws IOException {
-        String companyName = authrnticationCheck();
+        String companyName = extractPrincipal();
    
         Optional<Company> isCompanyActive = companyRepo.findByName(companyName);
    
@@ -219,7 +204,7 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService {
         }
     }
 
-    private String authrnticationCheck() throws IOException{
+    private String extractPrincipal() throws IOException{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if(authentication == null){
@@ -229,5 +214,5 @@ public class PlanStatisticsServiceImp implements PlanStatisticsService {
         return authentication.getPrincipal().toString();
     }
 
-    
+
  }

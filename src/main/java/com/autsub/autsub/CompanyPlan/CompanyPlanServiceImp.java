@@ -26,7 +26,7 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
 
     @Override
     public PlanResponseDto createCompanyPlan(PlanRequestDto planRequestDto) throws IOException {
-       String companyName = authrnticationCheck();
+       String companyName = extractPrincipal();
 
         Optional<Company> iscompanyActive = companyRepo.findByName(companyName);
 
@@ -46,12 +46,21 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
 
         companyPlanRepo.save(companyPlan);
 
-        return new PlanResponseDto(companyPlan.getId());
+        PlanResponseDto response = new PlanResponseDto(companyPlan.getId(), 
+                                                       companyPlan.getTitel(),
+                                                       companyPlan.getCategory(),
+                                                       companyPlan.getDescription(),
+                                                       companyPlan.getRecurring(),
+                                                       companyPlan.getPrice(), 
+                                                       companyPlan.getTrial());
+
+        return response;
+        
     }
 
     @Override
-    public void updatePlanData(PlanRequestDto planRequestDto, Long planID) throws IOException {
-        String companyName = authrnticationCheck();
+    public PlanResponseDto updatePlanData(PlanRequestDto planRequestDto, Long planID) throws IOException {
+        String companyName = extractPrincipal();
 
         Optional<Company> iscompanyActive = companyRepo.findByName(companyName);
 
@@ -59,31 +68,36 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
             throw new NotActiveAccountException();
         }
 
-        Company company = iscompanyActive.get();
-
-        Optional<CompanyPlan> companyPlan = companyPlanRepo.findByCompanyName(company.getName());
+        Optional<CompanyPlan> companyPlan = companyPlanRepo.findById(planID);
 
         if (!companyPlan.isPresent()) {
             throw new BadRequestException("Company plan not found");
         }
 
-        CompanyPlan newCompanyPlan = companyPlan.get();
-
         companyPlanRepo.updateCompanyPlan(  
-                newCompanyPlan.getTitel(),
-                newCompanyPlan.getCategory(),
-                newCompanyPlan.getDescription(),
-                newCompanyPlan.getRecurring(),
-                newCompanyPlan.getPrice(),
-                newCompanyPlan.getTrial(),
+                planRequestDto.getTitel(),
+                planRequestDto.getCategory(),
+                planRequestDto.getDescription(),
+                planRequestDto.getRecurring(),
+                planRequestDto.getPrice(),
+                planRequestDto.getTrial(),
                 planID
              );
+
+        PlanResponseDto response = new PlanResponseDto(planID,
+                                                          planRequestDto.getTitel(),
+                                                          planRequestDto.getCategory(),
+                                                          planRequestDto.getDescription(),
+                                                          planRequestDto.getRecurring(),
+                                                          planRequestDto.getPrice(),
+                                                          planRequestDto.getTrial());
+
+        return response;
     }
 
-
     @Override
-    public void providOffer(Long planId, float offerPrice) throws IOException{
-       authrnticationCheck();
+    public void updatePlanLastOfferPrice(Long planId, float offerPrice) throws IOException{
+        extractPrincipal();
 
          Optional<CompanyPlan> isPlanExists = companyPlanRepo.findById(planId);
 
@@ -100,7 +114,7 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
 
     @Override
     public void deletePlan(Long palnId) throws IOException{
-       authrnticationCheck();
+       extractPrincipal();
 
         companyPlanRepo.deleteById(palnId);
     }
@@ -108,7 +122,7 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
 
     @Override
     public List<CompanyPlan> getcompanyPlans() throws IOException{
-     String companyName = authrnticationCheck();
+     String companyName = extractPrincipal();
 
      Optional<Company> isCompanyActive = companyRepo.findByName(companyName);
 
@@ -126,7 +140,7 @@ public class CompanyPlanServiceImp implements CompanyPlanService {
     }
 
 
-    private String authrnticationCheck() throws IOException{
+    private String extractPrincipal() throws IOException{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if(authentication == null){

@@ -6,8 +6,8 @@ import com.autsub.autsub.CompanyPlan.Dto.PlanResponseDto;
 
 public interface CompanyPlanService {
  PlanResponseDto createCompanyPlan(PlanRequestDto planRequestDto) throws Exception;
- void updatePlanData(PlanRequestDto planRequestDto, Long planID) throws Exception; // should return updated plan data 
- void providOffer(Long planId, float offerPrice) throws Exception; // should return the offer details  
+ PlanResponseDto updatePlanData(PlanRequestDto planRequestDto, Long planID) throws Exception; 
+ void updatePlanLastOfferPrice(Long planId, float offerPrice) throws Exception;   
  void deletePlan(Long planId) throws Exception;
  List<CompanyPlan> getcompanyPlans() throws Exception;
 }

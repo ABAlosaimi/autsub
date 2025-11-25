@@ -73,11 +73,9 @@ public class Company implements UserDetails{
      @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
      private boolean active;
 
-     
      public Boolean getActive() {
          return active;
      }
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
